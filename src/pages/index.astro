@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { profile, seoDefaults } from '../data/profile';
+import { achievements } from '../data/achievements';
+import { getFeaturedPosts, getAllProjects } from '../lib/blog';
+import { personJsonLd } from '../lib/seo';
+
+const posts = await getFeaturedPosts(3);
+const projects = await getAllProjects();
+const featuredProjects = projects.slice(0, 2);
+const selectedAchievements = achievements.slice(0, 3);
+---
+<BaseLayout
+  title={seoDefaults.title}
+  description={seoDefaults.description}
+  path="/"
+  jsonLd={personJsonLd()}
+>
+  <!-- Hero -->
+  <section aria-label="Introduction" style="max-width: 832px; padding: 32px 0 48px;">
+    <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 12px;">
+      {profile.designation}
+    </p>
+    <h1 style="font-size: 40px; margin-bottom: 16px;">{profile.headline}</h1>
+    <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 28px;">{profile.shortIntro}</p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href={profile.resumePdfPath} download style="background: var(--color-accent); color: #fff; padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none;">Download resume ↓</a>
+      <a href="/blog" style="border: 1px solid var(--color-border); color: var(--color-text); padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none;">Read articles →</a>
+    </div>
+    <p style="margin-top: 20px; display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px;">
+      {profile.socials.map((s) => <a href={s.href} target={s.href.startsWith('mailto') ? undefined : '_blank'} rel={s.href.startsWith('mailto') ? undefined : 'noopener noreferrer'} style="color: var(--color-text-secondary); text-decoration: underline; text-underline-offset: 3px;">{s.label} ↗</a>)}
+    </p>
+  </section>
+
+  <!-- Highlights -->
+  <section aria-label="Highlights" style="border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 32px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
+    {profile.careerHighlights.map((h) => (
+      <div>
+        <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">{h.label}</p>
+        <p style="font-weight: 600; font-size: 16px;">{h.value}</p>
+      </div>
+    ))}
+  </section>
+
+  <!-- Selected Achievements -->
+  <section aria-label="Selected achievements" style="padding: 48px 0 8px;">
+    <h2 style="font-size: 22px; margin-bottom: 8px;">Selected achievements</h2>
+    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Engineering, architecture, and leadership outcomes.</p>
+    {selectedAchievements.map((a) => (
+      <div style="border-bottom: 1px solid var(--color-border); padding: 16px 0;">
+        <h3 style="font-size: 18px;">{a.title}</h3>
+        <p style="color: var(--color-text-secondary);">{a.description} <span style="font-size: 13px;">{a.year} · {a.organization}</span></p>
+      </div>
+    ))}
+    <p style="margin-top: 16px;"><a href="/achievements" style="color: var(--color-accent); font-weight: 600;">View all achievements →</a></p>
+  </section>
+
+  <!-- Featured Projects -->
+  <section aria-label="Featured projects" style="padding: 40px 0 8px;">
+    <h2 style="font-size: 22px; margin-bottom: 8px;">Featured projects</h2>
+    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">Experiments and research in AI and software engineering.</p>
+    {featuredProjects.map((p) => <ProjectCard project={p} />)}
+    <p style="margin-top: 16px;"><a href="/projects" style="color: var(--color-accent); font-weight: 600;">All projects →</a></p>
+  </section>
+
+  <!-- Latest Articles -->
+  <section aria-label="Latest articles" style="padding: 40px 0 8px;">
+    <h2 style="font-size: 22px; margin-bottom: 8px;">Latest articles</h2>
+    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Technical writing on architecture, AI, and engineering leadership.</p>
+    {posts.length > 0 ? (
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        {posts.map((p) => <ArticleCard post={p} />)}
+      </div>
+    ) : (
+      <p style="color: var(--color-text-secondary);">No articles yet — publish your first Markdown file in <code>src/content/blog/</code>.</p>
+    )}
+    <p style="margin-top: 16px;"><a href="/blog" style="color: var(--color-accent); font-weight: 600;">All articles →</a></p>
+  </section>
+
+  <!-- Current Exploration -->
+  <section aria-label="Current exploration" style="padding: 40px 0;">
+    <h2 style="font-size: 22px; margin-bottom: 16px;">Current exploration</h2>
+    <ul style="list-style: disc; padding-left: 24px; color: var(--color-text-secondary);">
+      {profile.currentInterests.map((i) => <li style="margin-bottom: 6px;"><strong style="color: var(--color-text);">{i.title}</strong> — {i.note}</li>)}
+    </ul>
+  </section>
+</BaseLayout>

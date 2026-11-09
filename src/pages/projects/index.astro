@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getAllProjects } from '../../lib/blog';
+const projects = await getAllProjects();
+---
+<BaseLayout title="Projects" description="Technical projects and experiments — engineering diagram intelligence, agentic efficiency, and AI engineering research." path="/projects">
+  <div style="max-width: 832px; margin: 0 auto;">
+    <h1 style="font-size: 32px; margin-bottom: 8px;">Projects</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">Experiments and research — statuses are stated honestly (concept to completed).</p>
+    {projects.map((p) => <ProjectCard project={p} />)}
+    <p style="margin-top: 24px; color: var(--color-text-secondary); font-size: 14px;">Add a project by creating a new file in <code>src/content/projects/</code> — see docs/PUBLISHING.md.</p>
+  </div>
+</BaseLayout>

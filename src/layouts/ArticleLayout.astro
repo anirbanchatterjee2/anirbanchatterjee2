@@ -1,0 +1,61 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ShareButtons from '../components/ShareButtons.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import type { BlogPost } from '../lib/blog';
+import { formatDate } from '../lib/utils';
+import { blogPostingJsonLd } from '../lib/seo';
+
+interface Props { post: BlogPost; related: BlogPost[]; readingTime: number; }
+const { post, related, readingTime } = Astro.props;
+const slug = post.id.replace(/\.(md|mdx)$/, '');
+const updated = post.data.updatedDate ?? post.data.pubDate;
+const jsonLd = blogPostingJsonLd({
+  title: post.data.title,
+  description: post.data.seoDescription ?? post.data.description,
+  path: `/blog/${slug}`,
+  pubDate: post.data.pubDate,
+  updatedDate: updated,
+  author: post.data.author,
+  image: post.data.coverImage,
+});
+---
+<BaseLayout
+  title={post.data.seoTitle ?? post.data.title}
+  description={post.data.seoDescription ?? post.data.description}
+  path={`/blog/${slug}`}
+  image={post.data.coverImage}
+  type="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  updatedTime={updated.toISOString()}
+  author={post.data.author}
+  jsonLd={jsonLd}
+>
+  <article style="max-width: 720px; margin: 0 auto;">
+    <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 8px;">
+      {post.data.category} · {formatDate(post.data.pubDate)} · {readingTime} min read
+    </p>
+    <h1 class="prose-serif" style="font-size: 36px; font-weight: 700; margin-bottom: 12px;">{post.data.title}</h1>
+    <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 24px;">{post.data.description}</p>
+    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">
+      By {post.data.author}
+      {post.data.tags.length > 0 && <> · {post.data.tags.map((t, i) => <a href={`/blog/tags/${t.toLowerCase().replace(/\s+/g, '-')}`} style="color: var(--color-accent); text-decoration: none;">{t}{i < post.data.tags.length - 1 ? ' ' : ''}</a>)}</>}
+    </p>
+    {post.data.coverImage && <img src={post.data.coverImage} alt={`Cover image for ${post.data.title}`} width="1200" height="630" style="width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 32px;" />}
+    <ShareButtons title={post.data.title} path={`/blog/${slug}`} />
+    <div class="prose" style="margin-top: 32px;">
+      <slot />
+    </div>
+    <div style="margin-top: 32px;">
+      <ShareButtons title={post.data.title} path={`/blog/${slug}`} />
+    </div>
+    {related.length > 0 && (
+      <section aria-label="Related articles" style="margin-top: 48px;">
+        <h2 style="font-size: 20px; margin-bottom: 16px;">Related articles</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+          {related.map((r) => <ArticleCard post={r} />)}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>

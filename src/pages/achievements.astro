@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { achievements } from '../data/achievements';
+---
+<BaseLayout title="Achievements" description="Engineering achievements, architecture contributions, leadership and certifications — shown factually with verifiable impact only." path="/achievements">
+  <div style="max-width: 832px; margin: 0 auto;">
+    <h1 style="font-size: 32px; margin-bottom: 8px;">Achievements</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Prominent but without the awards-gallery look — context first, impact only where verifiable. Edit in <code>src/data/achievements.ts</code>.</p>
+    {achievements.map((a) => (
+      <article style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; background: var(--color-surface);">
+        <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+          <h2 style="font-size: 20px;">{a.title}</h2>
+          <span style="font-size: 13px; color: var(--color-text-secondary);">{a.year}</span>
+        </div>
+        <p style="color: var(--color-text-secondary); margin: 8px 0;">{a.organization}</p>
+        <p>{a.description}</p>
+        {a.impact && <p style="font-weight: 600; margin-top: 8px;">Impact: {a.impact}</p>}
+        {a.image && <img src={a.image} alt={`Photo: ${a.title}`} width="800" height="500" loading="lazy" style="margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--color-border); max-width: 100%; height: auto;" />}
+        {a.tags.length > 0 && <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">{a.tags.join(' · ')}</p>}
+      </article>
+    ))}
+  </div>
+</BaseLayout>

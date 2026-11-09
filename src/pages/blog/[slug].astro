@@ -1,0 +1,23 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { getRelatedPosts } from '../../lib/blog';
+import { readingTime } from '../../lib/utils';
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('blog', ({ data }) => data.draft !== true);
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const related = await getRelatedPosts(post, 3);
+const mins = readingTime(post.body ?? '');
+---
+<ArticleLayout post={post} related={related} readingTime={mins}>
+  <Content />
+</ArticleLayout>

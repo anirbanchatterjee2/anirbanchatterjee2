@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { skillCategories } from '../data/skills';
+const levelStyle: Record<string, string> = {
+  'Professional experience': 'border-color: var(--color-accent); color: var(--color-accent);',
+  'Working knowledge': 'color: var(--color-text-secondary);',
+  'Currently exploring': 'color: var(--color-text-secondary); border-style: dashed;',
+};
+---
+<BaseLayout title="Skills" description="Technical capabilities grouped by domain — Java, Spring Boot, Angular, AWS, distributed systems and AI — with honest levels, no percentages." path="/skills">
+  <div style="max-width: 832px; margin: 0 auto;">
+    <h1 style="font-size: 32px; margin-bottom: 8px;">Technical skills</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Grouped by domain. Levels distinguish deep professional experience from working knowledge and current exploration — no invented percentages.</p>
+    {skillCategories.map((cat) => (
+      <section style="margin-bottom: 32px; border-bottom: 1px solid var(--color-border); padding-bottom: 24px;">
+        <h2 style="font-size: 20px;">{cat.title}</h2>
+        <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 12px;">{cat.description}</p>
+        <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px;">
+          {cat.skills.map((s) => (
+            <li style={`border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 12px; font-size: 13px; ${levelStyle[s.level] ?? ''}`}>
+              {s.name} <span style="opacity: 0.8;">· {s.level}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

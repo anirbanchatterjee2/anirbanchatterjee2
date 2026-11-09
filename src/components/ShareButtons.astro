@@ -1,0 +1,29 @@
+---
+import { canonicalUrl } from '../lib/seo';
+interface Props { title: string; path: string; }
+const { title, path } = Astro.props;
+const fullUrl = canonicalUrl(path);
+const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`;
+const encodedTitle = encodeURIComponent(title);
+---
+<div class="no-print" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border: 1px solid var(--color-border); border-radius: var(--radius); padding: 14px 16px; background: var(--color-surface);">
+  <span style="font-size: 14px; color: var(--color-text-secondary);">Share this article:</span>
+  <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" aria-label={`Share "${title}" on LinkedIn`} style="background: #0a66c2; color: #fff; padding: 7px 14px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">in Share on LinkedIn</a>
+  <button type="button" data-copy-link={fullUrl} data-title={encodedTitle} style="border: 1px solid var(--color-border); background: transparent; color: var(--color-text); padding: 7px 14px; border-radius: 6px; font-size: 14px; cursor: pointer;">Copy link</button>
+  <span data-copy-status role="status" aria-live="polite" style="font-size: 13px; color: var(--color-accent);"></span>
+</div>
+<script>
+  document.querySelectorAll('[data-copy-link]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const url = btn.getAttribute('data-copy-link') ?? '';
+      const status = btn.parentElement?.querySelector('[data-copy-status]');
+      try {
+        await navigator.clipboard.writeText(url);
+        if (status) status.textContent = 'Link copied ✓';
+      } catch {
+        if (status) status.textContent = url;
+      }
+      setTimeout(() => { if (status) status.textContent = ''; }, 2500);
+    });
+  });
+</script>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+import { experience, education } from '../data/experience';
+import { achievements } from '../data/achievements';
+import { skillCategories } from '../data/skills';
+---
+<BaseLayout title="Resume" description={`Resume of ${profile.name} — ${profile.headline}. Print-friendly and downloadable as PDF.`} path="/resume">
+  <!-- Screen-only actions -->
+  <div class="no-print" style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px;">
+    <button type="button" onclick="window.print()" style="background: var(--color-accent); color: #fff; padding: 10px 18px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer;">Print / Save as PDF</button>
+    <a href={profile.resumePdfPath} download style="border: 1px solid var(--color-border); padding: 10px 18px; border-radius: 6px; font-weight: 600; color: var(--color-text); text-decoration: none;">Download PDF ↓</a>
+    <span style="color: var(--color-text-secondary); font-size: 14px; align-self: center;">One resume, generated from the same data as this site — no duplicate source.</span>
+  </div>
+
+  <!-- Print-friendly resume -->
+  <article style="max-width: 832px; margin: 0 auto;">
+    <h1 style="font-size: 30px; margin-bottom: 4px;">{profile.name}</h1>
+    <p style="font-weight: 600; color: var(--color-accent);">{profile.headline}</p>
+    <p style="font-size: 14px; color: var(--color-text-secondary);">{profile.email} · {profile.linkedin} · {profile.github}</p>
+    <p style="margin: 16px 0;">{profile.shortIntro}</p>
+
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Experience</h2>
+    {experience.map((e) => (
+      <section style="margin: 20px 0;">
+        <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+          <strong>{e.designation} — {e.company}</strong>
+          <span style="font-size: 13px; color: var(--color-text-secondary);">{e.duration} · {e.location}</span>
+        </div>
+        <p style="font-size: 14px;">{e.summary}</p>
+        <ul style="list-style: disc; padding-left: 20px; font-size: 14px;">
+          {[...e.responsibilities, ...e.achievements].map((r) => <li>{r}</li>)}
+        </ul>
+        <p style="font-size: 13px; color: var(--color-text-secondary);">{e.technologies.join(' · ')}</p>
+      </section>
+    ))}
+
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Selected achievements</h2>
+    <ul style="list-style: disc; padding-left: 20px; margin: 12px 0;">
+      {achievements.map((a) => <li style="margin-bottom: 8px;"><strong>{a.title}</strong> ({a.year}, {a.organization}) — {a.description}</li>)}
+    </ul>
+
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Skills</h2>
+    {skillCategories.map((c) => (
+      <p style="font-size: 14px; margin: 8px 0;"><strong>{c.title}:</strong> {c.skills.map((s) => `${s.name} (${s.level})`).join(' · ')}</p>
+    ))}
+
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Education</h2>
+    {education.map((ed) => <p style="font-size: 14px; margin: 8px 0;"><strong>{ed.degree}</strong>, {ed.institution} — {ed.year}</p>)}
+  </article>
+</BaseLayout>

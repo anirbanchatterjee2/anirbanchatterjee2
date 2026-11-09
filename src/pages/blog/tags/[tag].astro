@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import type { GetStaticPaths } from 'astro';
+import { getPostsByTag, getAllTags } from '../../../lib/blog';
+import { humanize } from '../../../lib/utils';
+
+export const getStaticPaths = (async () => {
+  const tags = await getAllTags();
+  const paths: { params: { tag: string } }[] = [];
+  for (const t of tags) paths.push({ params: { tag: t.tag } });
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const posts = await getPostsByTag(tag ?? '');
+---
+<BaseLayout title={`#${humanize(tag ?? '')}`} description={`Articles tagged ${humanize(tag ?? '')}.`} path={`/blog/tags/${tag}`}>
+  <div style="max-width: 832px; margin: 0 auto;">
+    <h1 style="font-size: 32px; margin-bottom: 8px;">#{humanize(tag ?? '')}</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">{posts.length} article{posts.length === 1 ? '' : 's'} · <a href="/blog" style="color: var(--color-accent);">All articles →</a></p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+      {posts.map((p) => <ArticleCard post={p} />)}
+    </div>
+  </div>
+</BaseLayout>
