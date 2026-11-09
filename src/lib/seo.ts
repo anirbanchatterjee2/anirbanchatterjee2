@@ -3,7 +3,7 @@ import { profile } from '../data/profile';
 /** Absolute canonical URL for a path. */
 export function canonicalUrl(path: string): string {
   // SITE_URL is injected via astro.config at build time; mirror it here by reading env in client builds.
-  const base = import.meta.env.PUBLIC_SITE_URL ?? 'https://anirbanchatterjee.netlify.app';
+  const base = import.meta.env.PUBLIC_SITE_URL ?? 'https://anirban-chatterjee.netlify.app';
   return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
 }
 
@@ -59,4 +59,48 @@ export function blogPostingJsonLd(opts: {
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl(opts.path) },
     image: opts.image ? canonicalUrl(opts.image) : canonicalUrl(DEFAULT_OG_IMAGE),
   };
+}
+
+/** JSON-LD BreadcrumbList for any page. */
+export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: canonicalUrl(item.path),
+    })),
+  };
+}
+
+export interface TocEntry {
+  depth: number;
+  text: string;
+  id: string;
+}
+
+const slugId = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+
+/** Extract h2/h3 headings from Markdown body for the table of contents. */
+export function buildToc(markdownBody: string): TocEntry[] {
+  const entries: TocEntry[] = [];
+  const seen = new Set<string>();
+  for (const line of markdownBody.split('\n')) {
+    const m = line.match(/^(#{2,3})\s+(.+?)\s*#*\s*$/);
+    if (!m) continue;
+    const text = m[2].trim();
+    if (!text) continue;
+    let id = slugId(text);
+    if (seen.has(id)) {
+      let n = 2;
+      while (seen.has(`${id}-${n}`)) n++;
+      id = `${id}-${n}`;
+    }
+    seen.add(id);
+    entries.push({ depth: m[1].length, text, id });
+  }
+  return entries;
 }

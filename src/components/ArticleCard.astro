@@ -1,21 +1,26 @@
 ---
 import type { BlogPost } from '../lib/blog';
-import { formatDate, humanize } from '../lib/utils';
+import { formatDate, humanize, readingTime } from '../lib/utils';
 
 interface Props { post: BlogPost; }
 const { post } = Astro.props;
 const slug = post.id.replace(/\.(md|mdx)$/, '');
+const minutes = readingTime(post.body ?? '');
 ---
-<article style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; background: var(--color-surface);">
+<article style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 18px; background: var(--color-surface);">
   <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 8px;">
     <span>{formatDate(post.data.pubDate)}</span>
     <span aria-hidden="true">·</span>
     <span>{humanize(post.data.category)}</span>
-    {post.data.tags.slice(0, 3).map((t) => <a href={`/blog/tags/${t.toLowerCase().replace(/\s+/g, '-')}`} style="color: var(--color-accent); text-decoration: none;">#{t}</a>)}
+    <span aria-hidden="true">·</span>
+    <span>{minutes} min read</span>
   </div>
-  <h3 style="font-size: 19px; margin-bottom: 8px;">
+  <h3 style="font-size: 18px; margin-bottom: 8px;">
     <a href={`/blog/${slug}`} style="color: var(--color-text); text-decoration: none;">{post.data.title}</a>
   </h3>
-  <p style="color: var(--color-text-secondary); font-size: 15px; margin-bottom: 12px;">{post.data.description}</p>
-  <a href={`/blog/${slug}`} style="font-size: 14px; font-weight: 600; color: var(--color-accent); text-decoration: none;">Read article →</a>
+  <p style="color: var(--color-text-secondary); font-size: 14.5px; margin-bottom: 10px;">{post.data.description}</p>
+  <p style="display: flex; gap: 12px; align-items: center;">
+    <a href={`/blog/${slug}`} style="font-size: 14px; font-weight: 600; color: var(--color-accent); text-decoration: none;">Read article →</a>
+    {post.data.tags.slice(0, 3).map((t) => <a href={`/blog/tags/${t.toLowerCase().replace(/\s+/g, '-')}`} style="font-size: 13px; color: var(--color-text-secondary); text-decoration: none;">#{t}</a>)}
+  </p>
 </article>

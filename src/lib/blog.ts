@@ -58,6 +58,12 @@ export async function getFeaturedPosts(limit = 3): Promise<BlogPost[]> {
     .slice(0, limit);
 }
 
+/** Latest posts strictly by publication date (homepage "Latest writing"). */
+export async function getLatestPosts(limit = 3): Promise<BlogPost[]> {
+  const posts = await getPublishedPosts();
+  return posts.slice(0, limit);
+}
+
 /** All projects, sorted by featured then name. */
 export async function getAllProjects(): Promise<Project[]> {
   const all = await getCollection('projects', ({ data }) => data.draft !== true);

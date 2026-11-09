@@ -9,17 +9,18 @@ interface Props extends SeoProps {
   jsonLd?: unknown;
 }
 const { jsonLd, ...seoProps } = Astro.props;
+const scripts = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead {...seoProps} />
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {scripts.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
     <Header />
-    <main id="main" style="max-width: 1152px; margin: 0 auto; padding: 48px 24px 0;">
+    <main id="main" style="max-width: 1152px; margin: 0 auto; padding: 44px 24px 0;">
       <slot />
     </main>
     <Footer />

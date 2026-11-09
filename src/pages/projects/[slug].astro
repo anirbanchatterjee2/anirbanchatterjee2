@@ -2,8 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
-import { getAllProjects } from '../../lib/blog';
-import { seoDefaults } from '../../data/profile';
 
 export const getStaticPaths = (async () => {
   const projects = await getCollection('projects', ({ data }) => data.draft !== true);
@@ -19,21 +17,36 @@ const statusLabel = { 'concept': 'Concept', 'research': 'Research', 'in-developm
 const path = `/projects/${project.id.replace(/\.(md|mdx)$/, '')}`;
 ---
 <BaseLayout title={project.data.name} description={project.data.description} path={path} image={project.data.coverImage}>
-  <article style="max-width: 720px; margin: 0 auto;">
-    <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">
-      Status: {statusLabel}{project.data.startedYear && ` · Started ${project.data.startedYear}`}
-    </p>
-    <h1 style="font-size: 36px; margin: 8px 0 12px;">{project.data.name}</h1>
-    <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 16px;">{project.data.description}</p>
-    {project.data.techStack.length > 0 && (
-      <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;"><strong>Stack:</strong> {project.data.techStack.join(' · ')}</p>
-    )}
-    <p style="display: flex; gap: 16px; margin-bottom: 32px;">
+  <article style="max-width: 760px; margin: 0 auto;">
+    <p class="eyebrow">Engineering case study · {statusLabel}{project.data.startedYear && ` · Started ${project.data.startedYear}`}</p>
+    <h1 style="font-size: 34px; margin: 8px 0 12px;">{project.data.name}</h1>
+    <p class="hero-serif" style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 16px;">{project.data.description}</p>
+    <p style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 14px;">
       {project.data.repoUrl && <a href={project.data.repoUrl} target="_blank" rel="noopener noreferrer" style="font-weight: 600; color: var(--color-accent);">GitHub ↗</a>}
       {project.data.demoUrl && <a href={project.data.demoUrl} target="_blank" rel="noopener noreferrer" style="font-weight: 600; color: var(--color-accent);">Live demo ↗</a>}
+      <span style="color: var(--color-text-secondary);">Status: {statusLabel} — never presented as production-ready beyond its evidence.</span>
     </p>
-    {project.data.coverImage && <img src={project.data.coverImage} alt={`Diagram / screenshot for ${project.data.name}`} style="width: 100%; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 32px;" />}
+    {project.data.problem && <div style="border-left: 3px solid var(--color-accent); padding-left: 16px; margin-bottom: 20px;"><h2 style="font-size: 16px;">Problem</h2><p style="color: var(--color-text-secondary);">{project.data.problem}</p></div>}
+    {project.data.approach && <div style="border-left: 3px solid var(--color-accent); padding-left: 16px; margin-bottom: 20px;"><h2 style="font-size: 16px;">Technical approach</h2><p style="color: var(--color-text-secondary);">{project.data.approach}</p></div>}
+    {project.data.techStack.length > 0 && <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 20px;"><strong style="color: var(--color-text);">Stack:</strong> {project.data.techStack.join(' · ')}</p>}
+    {project.data.designDecisions.length > 0 && (
+      <section style="margin-bottom: 20px;">
+        <h2 style="font-size: 16px; margin-bottom: 8px;">Key design decisions</h2>
+        <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
+          {project.data.designDecisions.map((d) => <li>{d}</li>)}
+        </ul>
+      </section>
+    )}
+    {project.data.coverImage && !project.data.coverImage.includes('og-default') && <img src={project.data.coverImage} alt={`Diagram / screenshot for ${project.data.name}`} style="width: 100%; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 28px;" />}
     <div class="prose"><Content /></div>
+    {project.data.roadmap.length > 0 && (
+      <section style="margin-top: 28px;">
+        <h2 style="font-size: 16px; margin-bottom: 8px;">Future roadmap</h2>
+        <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
+          {project.data.roadmap.map((r) => <li>{r}</li>)}
+        </ul>
+      </section>
+    )}
     <p style="margin-top: 32px;"><a href="/projects" style="color: var(--color-accent); font-weight: 600;">← All projects</a></p>
   </article>
 </BaseLayout>

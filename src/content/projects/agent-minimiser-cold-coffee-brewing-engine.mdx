@@ -1,12 +1,22 @@
 ---
 name: Agent Minimiser — Cold Coffee Brewing Engine
 description: An experimental concept exploring ways to optimise agentic AI workflows, minimise unnecessary token consumption, and improve the efficiency of AI-powered execution.
+problem: Agentic workflows waste tokens — redundant reasoning, oversized context, verbose tool outputs, and unfocused planning loops. The cost and latency compound with every step.
+approach: Budgeted execution — per-task token/step budgets, context pruning, tool-output shaping, and model routing measured against task success.
 status: concept
 techStack:
   - LangGraph
   - LangChain
   - LLMs
   - Python
+designDecisions:
+  - Treat tokens as a scarce resource with explicit stop conditions.
+  - Pass only task-relevant state between nodes instead of full history.
+  - Route triage to a cheap model; reserve capable models for deep reasoning.
+roadmap:
+  - Define representative benchmark tasks for success-vs-cost measurement.
+  - Prototype budget and pruning policies in LangGraph.
+  - Publish evaluation results before any production claims.
 repoUrl: https://github.com/anirbanchatterjee2/coldcoffee
 featured: true
 startedYear: '2025'

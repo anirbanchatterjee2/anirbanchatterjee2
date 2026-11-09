@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // Site URL is controlled centrally in src/data/profile.ts via SITE_URL env.
 // During Netlify preview builds, Astro uses Netlify's URL env automatically.
-const site = process.env.PUBLIC_SITE_URL ?? 'https://anirbanchatterjee.netlify.app';
+const site = process.env.PUBLIC_SITE_URL ?? 'https://anirban-chatterjee.netlify.app';
 
 // https://astro.new/config
 export default defineConfig({

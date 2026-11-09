@@ -1,24 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
-import { experience, education } from '../data/experience';
+import { experience, education, certifications } from '../data/experience';
 import { achievements } from '../data/achievements';
 import { skillCategories } from '../data/skills';
 ---
 <BaseLayout title="Resume" description={`Resume of ${profile.name} — ${profile.headline}. Print-friendly and downloadable as PDF.`} path="/resume">
   <!-- Screen-only actions -->
   <div class="no-print" style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px;">
-    <button type="button" onclick="window.print()" style="background: var(--color-accent); color: #fff; padding: 10px 18px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer;">Print / Save as PDF</button>
-    <a href={profile.resumePdfPath} download style="border: 1px solid var(--color-border); padding: 10px 18px; border-radius: 6px; font-weight: 600; color: var(--color-text); text-decoration: none;">Download PDF ↓</a>
-    <span style="color: var(--color-text-secondary); font-size: 14px; align-self: center;">One resume, generated from the same data as this site — no duplicate source.</span>
+    <button type="button" onclick="window.print()" style="background: var(--color-accent); color: #fff; padding: 11px 20px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer;">Print / Save as PDF</button>
+    <a id="resume-download" href={profile.resumePdfPath} download style="border: 1px solid var(--color-border); padding: 11px 20px; border-radius: 6px; font-weight: 600; color: var(--color-text); text-decoration: none; background: var(--color-surface);">Download PDF ↓</a>
+    <a href={`mailto:${profile.email}`} style="border: 1px solid var(--color-border); padding: 11px 20px; border-radius: 6px; font-weight: 600; color: var(--color-text); text-decoration: none; background: var(--color-surface);">{profile.email}</a>
   </div>
+  <p id="resume-fallback" class="no-print" role="status" style="display: none; border: 1px solid var(--color-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 24px; background: var(--color-surface);">
+    The PDF file is not deployed yet. Use <strong>Print / Save as PDF</strong> above (or the fallback button) to generate it directly from this page — content is identical.
+  </p>
+  <script>
+    (function () {
+      const link = document.getElementById('resume-download');
+      const note = document.getElementById('resume-fallback');
+      if (!link || !note) return;
+      fetch(link.getAttribute('href') ?? '', { method: 'HEAD' }).then(async (res) => {
+        if (!res.ok) {
+          link.remove();
+          note.style.display = 'block';
+        }
+      }).catch(() => {
+        link.remove();
+        note.style.display = 'block';
+      });
+    })();
+  </script>
 
   <!-- Print-friendly resume -->
   <article style="max-width: 832px; margin: 0 auto;">
-    <h1 style="font-size: 30px; margin-bottom: 4px;">{profile.name}</h1>
+    <h1 style="font-size: 30px; margin-bottom: 4px;">Anirban Chatterjee</h1>
     <p style="font-weight: 600; color: var(--color-accent);">{profile.headline}</p>
     <p style="font-size: 14px; color: var(--color-text-secondary);">{profile.email} · {profile.linkedin} · {profile.github}</p>
-    <p style="margin: 16px 0;">{profile.shortIntro}</p>
+    <p style="margin: 16px 0;">{profile.shortIntro} Open to: {profile.targetRoles.join(' · ')}.</p>
 
     <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Experience</h2>
     {experience.map((e) => (
@@ -45,7 +64,8 @@ import { skillCategories } from '../data/skills';
       <p style="font-size: 14px; margin: 8px 0;"><strong>{c.title}:</strong> {c.skills.map((s) => `${s.name} (${s.level})`).join(' · ')}</p>
     ))}
 
-    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Education</h2>
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Education & Certification</h2>
     {education.map((ed) => <p style="font-size: 14px; margin: 8px 0;"><strong>{ed.degree}</strong>, {ed.institution} — {ed.year}</p>)}
+    {certifications.map((c) => <p style="font-size: 14px; margin: 8px 0;"><strong>{c.name}</strong>, {c.issuer} — {c.year}</p>)}
   </article>
 </BaseLayout>

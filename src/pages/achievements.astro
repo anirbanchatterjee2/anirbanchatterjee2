@@ -1,23 +1,32 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { achievements } from '../data/achievements';
+import { achievements, achievementGroups } from '../data/achievements';
+const grouped = achievementGroups
+  .map((g) => ({ group: g, items: achievements.filter((a) => a.group === g) }))
+  .filter((g) => g.items.length > 0);
 ---
-<BaseLayout title="Achievements" description="Engineering achievements, architecture contributions, leadership and certifications — shown factually with verifiable impact only." path="/achievements">
+<BaseLayout title="Achievements" description="Achievement library grouped by business impact, architecture, transformation, leadership, and recognition — context, contribution, and verified outcomes." path="/achievements">
   <div style="max-width: 832px; margin: 0 auto;">
-    <h1 style="font-size: 32px; margin-bottom: 8px;">Achievements</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Prominent but without the awards-gallery look — context first, impact only where verifiable. Edit in <code>src/data/achievements.ts</code>.</p>
-    {achievements.map((a) => (
-      <article style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; background: var(--color-surface);">
-        <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
-          <h2 style="font-size: 20px;">{a.title}</h2>
-          <span style="font-size: 13px; color: var(--color-text-secondary);">{a.year}</span>
-        </div>
-        <p style="color: var(--color-text-secondary); margin: 8px 0;">{a.organization}</p>
-        <p>{a.description}</p>
-        {a.impact && <p style="font-weight: 600; margin-top: 8px;">Impact: {a.impact}</p>}
-        {a.image && <img src={a.image} alt={`Photo: ${a.title}`} width="800" height="500" loading="lazy" style="margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--color-border); max-width: 100%; height: auto;" />}
-        {a.tags.length > 0 && <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">{a.tags.join(' · ')}</p>}
-      </article>
+    <p class="eyebrow">Achievement library</p>
+    <h1 style="font-size: 34px; margin: 8px 0 8px;">Achievements</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 36px;">Grouped by theme so related outcomes read together. Impact figures are only those stated in source resumes. Edit in <code>src/data/achievements.ts</code>.</p>
+    {grouped.map((g) => (
+      <section aria-label={g.group} style="margin-bottom: 40px;">
+        <h2 style="font-size: 22px; border-bottom: 2px solid var(--color-text); padding-bottom: 8px; margin-bottom: 16px;">{g.group}</h2>
+        {g.items.map((a) => (
+          <article style="border-bottom: 1px solid var(--color-border); padding: 18px 0;">
+            <div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline;">
+              <h3 style="font-size: 19px;">{a.title}</h3>
+              {a.impact && <span style="font-weight: 700; color: var(--color-accent); white-space: nowrap;">{a.impact}</span>}
+            </div>
+            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 8px;">{a.organization} · {a.year}</p>
+            <p style="margin-bottom: 6px;">{a.description}</p>
+            <p style="color: var(--color-text-secondary); font-size: 15px;"><strong style="color: var(--color-text);">Contribution:</strong> {a.contribution}</p>
+            {a.image && <img src={a.image} alt={`Photo: ${a.title}`} width="800" height="500" loading="lazy" style="margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--color-border); max-width: 100%; height: auto;" />}
+            <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">{a.tags.join(' · ')}</p>
+          </article>
+        ))}
+      </section>
     ))}
   </div>
 </BaseLayout>

@@ -1,12 +1,22 @@
 ---
 name: Engineering Diagram Intelligence Platform
 description: An application that analyses engineering diagrams, extracts information, and translates visual engineering information into structured technical details.
+problem: Engineering teams work with circuit diagrams, P&ID drawings, and architecture visuals that exist as images or PDFs. Extracting components, connections, and specifications from them is slow and error-prone.
+approach: Vision + OCR perception feeding schema-validated structured extraction, with human review for low-confidence regions.
 status: in-development
 techStack:
   - Python
   - FastAPI
   - LLMs
   - Computer Vision
+designDecisions:
+  - Job-based API for long-running inference rather than synchronous requests.
+  - Versioned extraction schemas so downstream consumers can evolve without breaking.
+  - Human-in-the-loop correction for low-confidence regions instead of silent invention.
+roadmap:
+  - Stabilise symbol and connectivity detection across drafting standards.
+  - Add evaluation harness with labelled diagram sets.
+  - Expand export formats (JSON, structured tables, searchable index).
 repoUrl: https://github.com/anirbanchatterjee2/pearl_engineer
 featured: true
 startedYear: '2025'

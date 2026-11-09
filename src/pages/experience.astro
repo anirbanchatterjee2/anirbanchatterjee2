@@ -1,15 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { experience } from '../data/experience';
+import { profile } from '../data/profile';
 ---
-<BaseLayout title="Experience" description="Professional experience — engineering leadership, architecture and delivery across 18+ years." path="/experience">
+<BaseLayout title="Experience" description="Detailed chronological experience — VP Engineering at Citi, Qualcomm and TCS architecture, 18+ years." path="/experience">
   <div style="max-width: 832px; margin: 0 auto;">
-    <h1 style="font-size: 32px; margin-bottom: 8px;">Professional experience</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Chronological history — full details, nothing invented. Edit in <code>src/data/experience.ts</code>.</p>
+    <p class="eyebrow">Experience</p>
+    <h1 style="font-size: 34px; margin: 8px 0 8px;">Professional experience</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">From hands-on engineering (2008) to VP Engineering — full responsibilities, contributions and business impact. Edit in <code>src/data/experience.ts</code>.</p>
+    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 32px;">Open to: {profile.targetRoles.join(' · ')}.</p>
+    {profile.careerTimeline.map((c) => (
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 12px; width: fit-content;">
+        <strong style="color: var(--color-text);">{c.organization}</strong> {c.dates} · {c.location}
+      </div>
+    ))}
+    <div style="margin-top: 24px;">
     {experience.map((e) => (
       <article style="border-bottom: 1px solid var(--color-border); padding: 28px 0;">
         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline;">
-          <h2 style="font-size: 22px;">{e.designation}</h2>
+          <h2 style="font-size: 21px;">{e.designation}</h2>
           <span style="font-size: 14px; color: var(--color-text-secondary);">{e.duration}</span>
         </div>
         <p style="font-weight: 600; color: var(--color-accent);">{e.company}</p>
@@ -19,12 +28,13 @@ import { experience } from '../data/experience';
         <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
           {e.responsibilities.map((r) => <li>{r}</li>)}
         </ul>
-        <h3 style="font-size: 15px; margin: 16px 0 8px;">Key achievements</h3>
+        <h3 style="font-size: 15px; margin: 16px 0 8px;">Major projects & business impact</h3>
         <ul style="list-style: disc; padding-left: 20px;">
           {e.achievements.map((a) => <li>{a}</li>)}
         </ul>
         <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 12px;">{e.technologies.join(' · ')}</p>
       </article>
     ))}
+    </div>
   </div>
 </BaseLayout>

@@ -4,21 +4,29 @@ import ShareButtons from '../components/ShareButtons.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import type { BlogPost } from '../lib/blog';
 import { formatDate } from '../lib/utils';
-import { blogPostingJsonLd } from '../lib/seo';
+import { blogPostingJsonLd, breadcrumbJsonLd, buildToc } from '../lib/seo';
 
 interface Props { post: BlogPost; related: BlogPost[]; readingTime: number; }
 const { post, related, readingTime } = Astro.props;
 const slug = post.id.replace(/\.(md|mdx)$/, '');
 const updated = post.data.updatedDate ?? post.data.pubDate;
-const jsonLd = blogPostingJsonLd({
-  title: post.data.title,
-  description: post.data.seoDescription ?? post.data.description,
-  path: `/blog/${slug}`,
-  pubDate: post.data.pubDate,
-  updatedDate: updated,
-  author: post.data.author,
-  image: post.data.coverImage,
-});
+const toc = buildToc(post.body ?? '');
+const jsonLd = [
+  blogPostingJsonLd({
+    title: post.data.title,
+    description: post.data.seoDescription ?? post.data.description,
+    path: `/blog/${slug}`,
+    pubDate: post.data.pubDate,
+    updatedDate: updated,
+    author: post.data.author,
+    image: post.data.coverImage,
+  }),
+  breadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Blog', path: '/blog' },
+    { name: post.data.title, path: `/blog/${slug}` },
+  ]),
+];
 ---
 <BaseLayout
   title={post.data.seoTitle ?? post.data.title}
@@ -31,26 +39,38 @@ const jsonLd = blogPostingJsonLd({
   author={post.data.author}
   jsonLd={jsonLd}
 >
-  <article style="max-width: 720px; margin: 0 auto;">
-    <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 8px;">
+  <article style="max-width: 760px; margin: 0 auto;">
+    <p class="eyebrow" style="margin-bottom: 10px;">
       {post.data.category} · {formatDate(post.data.pubDate)} · {readingTime} min read
     </p>
     <h1 class="prose-serif" style="font-size: 36px; font-weight: 700; margin-bottom: 12px;">{post.data.title}</h1>
-    <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 24px;">{post.data.description}</p>
+    <p class="hero-serif" style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 20px;">{post.data.description}</p>
     <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">
       By {post.data.author}
       {post.data.tags.length > 0 && <> · {post.data.tags.map((t, i) => <a href={`/blog/tags/${t.toLowerCase().replace(/\s+/g, '-')}`} style="color: var(--color-accent); text-decoration: none;">{t}{i < post.data.tags.length - 1 ? ' ' : ''}</a>)}</>}
     </p>
-    {post.data.coverImage && <img src={post.data.coverImage} alt={`Cover image for ${post.data.title}`} width="1200" height="630" style="width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 32px;" />}
+    {post.data.coverImage && <img src={post.data.coverImage} alt={`Cover image for ${post.data.title}`} width="1200" height="630" style="width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 28px;" />}
     <ShareButtons title={post.data.title} path={`/blog/${slug}`} />
-    <div class="prose" style="margin-top: 32px;">
+    {toc.length > 1 && (
+      <nav aria-label="Table of contents" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 16px 18px; margin-top: 24px; background: var(--color-surface);">
+        <p style="font-weight: 700; font-size: 14px; margin-bottom: 8px;">On this page</p>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          {toc.map((t) => (
+            <li style={`padding: 2px 0; ${t.depth === 3 ? 'padding-left: 16px;' : ''}`}>
+              <a href={`#${t.id}`} style="color: var(--color-text-secondary); font-size: 14px; text-decoration: none;">{t.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+    <div class="prose" style="margin-top: 28px;">
       <slot />
     </div>
     <div style="margin-top: 32px;">
       <ShareButtons title={post.data.title} path={`/blog/${slug}`} />
     </div>
     {related.length > 0 && (
-      <section aria-label="Related articles" style="margin-top: 48px;">
+      <section aria-label="Related articles" class="section-rule" style="margin-top: 48px; padding-top: 32px;">
         <h2 style="font-size: 20px; margin-bottom: 16px;">Related articles</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
           {related.map((r) => <ArticleCard post={r} />)}
