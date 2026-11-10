@@ -3,23 +3,31 @@
  * Edit name, headline, contact, socials here. Every page consumes this.
  *
  * Data pre-filled from Anirban's resumes (older detailed + newer VP resume).
- * Placeholders clearly marked with [TODO...] remain where no source was provided.
+ * Placeholders clearly marked with TODO(owner) remain where no source was provided.
  * Phone number and work-authorization details from resumes are deliberately NOT published here.
+ *
+ * Locale: en-GB (British spellings used throughout copy).
  */
 export const profile = {
-  name: 'ANIRBAN CHATTERJEE',
+  name: 'Anirban Chatterjee',
   firstName: 'Anirban',
-  headline: 'Engineering Executive | Technology Strategist | AI & Distributed Systems Architect',
+  headline: 'VP of Engineering, AML & Risk Technology',
   designation: 'Vice President, Engineering · Platform Modernization | Secure SaaS | AI-Assisted Delivery',
-  location: 'Pune, India · 8+ years in the U.S.',
+  location: 'Pune, India',
+  timezone: 'IST (UTC+5:30) · 8+ years U.S. experience',
   email: 'hereiam.1987@gmail.com',
   linkedin: 'https://www.linkedin.com/in/anirban-chatterjee-42151a19/',
   github: 'https://github.com/anirbanchatterjee2',
   resumePdfPath: '/resume.pdf', // Place a generated PDF at public/resume.pdf (see /resume page)
   heroIntro:
-    '18+ years building enterprise technology, modernising mission-critical platforms and leading engineering organisations across financial services and global technology companies. Focused on the intersection of AI-native engineering, intelligent automation and distributed systems.',
+    'I lead large global engineering organisations building regulated, high-throughput platforms, and apply AI where it measurably reduces cost and risk.',
   shortIntro:
     'Engineering executive with 18+ years (since 2008, 8+ in the U.S.) modernising mission-critical AML/risk and enterprise platforms in regulated, high-security environments — now focused on AI-native engineering and distributed systems.',
+  openTo: {
+    roles: 'VP / SVP Engineering, Director of Engineering, Head of Engineering, Principal / Distinguished Engineer, Enterprise / Solutions Architect, AI Engineering Leader, Technology Transformation Leader',
+    locationMobility: 'Pune, India · open to relocation',
+    availability: 'Available for new opportunities',
+  },
   longIntro: [
     'I started my career in 2008 at Tata Consultancy Services with a strong foundation in Java and enterprise software, growing through full-stack delivery (Spring Boot, Angular, AWS, distributed systems) into onsite/offshore coordination, vendor management, and technical leadership across the U.S. (Qualcomm in San Diego, Cognizant in Boston, Capgemini in Bethlehem, PA) and India.',
     'Since 2018 I have led architecture and engineering for Citi Bank’s AML and risk platforms — first as Technical Architect at L&T Infotech, then as Assistant Vice President (2019–2022) and Vice President of AML & Risk Technology (2023–present) in Pune — overseeing a multi-layer, geographically distributed engineering organisation, institutionalising DevSecOps and CI/CD practices, and introducing AI-assisted development tooling at scale (GitHub Copilot, Devin, RAG pipelines).',
@@ -27,10 +35,10 @@ export const profile = {
     'This site is my canonical record of experience, projects, and technical writing. Everything here is editable from version-controlled source — no invented achievements, no CMS dependency.',
   ],
   metrics: [
-    { value: '18+', label: 'Years of Experience' },
-    { value: '$25M+', label: 'Enterprise Business Impact' },
-    { value: '1000+', label: 'TPS · High-Throughput Systems' },
-    { value: '50+', label: 'Engineers Led' },
+    { value: '18+', label: 'Years of enterprise experience', basis: 'Career started 2008 (TCS); roles through 2026' },
+    { value: '$25M+', label: 'Enterprise business impact', basis: 'Sum of documented initiative outcomes: $20M (L&T name screening) + $4M (Citi open-source) + $1M (TCS HCM migration)' },
+    { value: '50+', label: 'Engineers led', basis: 'Citi VP AML & Risk Technology — multi-layer org, managing managers across geographies and vendors' },
+    { value: '70%', label: 'Deployment velocity improvement', basis: 'Citi VP — CI/CD standardisation and release governance (2023–present); baseline pre-standardisation' },
   ],
   careerTimeline: [
     {
@@ -74,8 +82,8 @@ export const profile = {
   careerHighlights: [
     { label: 'Experience', value: '18+ years (since 2008) · 8+ in the U.S.' },
     { label: 'Impact', value: '$25M+ measured business impact' },
-    { label: 'Scale', value: '1000+ TPS name screening · petabyte batches' },
     { label: 'Leadership', value: 'VP Engineering · multi-layer org · 50+ engineers' },
+    { label: 'Delivery', value: '70% deployment velocity improvement' },
   ],
   currentInterests: [
     { title: 'Generative AI', note: 'LLM-powered products and applications' },
@@ -107,9 +115,9 @@ export const profile = {
 
 export const seoDefaults = {
   siteName: 'Anirban Chatterjee',
-  title: 'Anirban Chatterjee — Engineering Executive | Technology Strategist | AI & Distributed Systems Architect',
+  title: 'Anirban Chatterjee — VP Engineering, AML and Risk Technology',
   description:
-    'Engineering executive with 18+ years modernising mission-critical enterprise platforms across financial services and global technology companies. Focused on AI-native engineering, intelligent automation and distributed systems.',
-  locale: 'en_US',
+    'VP of Engineering with 18+ years modernising mission-critical enterprise platforms across financial services and global technology companies. Focused on AI-native engineering, intelligent automation and distributed systems.',
+  locale: 'en_GB',
   author: 'Anirban Chatterjee',
 } as const;

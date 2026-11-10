@@ -30,7 +30,11 @@ import { profile } from '../data/profile';
 
     <h2 style="font-size: 22px; margin: 36px 0 14px;">Connect</h2>
     <p style="display: flex; gap: 16px; flex-wrap: wrap;">
-      {profile.socials.map((s) => <a href={s.href} target={s.href.startsWith('mailto:') ? undefined : '_blank'} rel={s.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'} style="color: var(--color-accent); font-weight: 600;">{s.label} ↗</a>)}
+      {profile.socials.map((s) => {
+        const isMailto = s.href.startsWith('mailto:');
+        const isPlaceholder = s.href.startsWith('TODO(owner)');
+        return <a href={isMailto || isPlaceholder ? '#' : s.href} target={isMailto && !isPlaceholder ? '_blank' : undefined} rel={isMailto && !isPlaceholder ? 'noopener noreferrer' : undefined} style="color: var(--color-accent); font-weight: 600;">{s.label} ↗</a>;
+      })}
     </p>
   </article>
 </BaseLayout>

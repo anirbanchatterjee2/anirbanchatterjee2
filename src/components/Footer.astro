@@ -14,9 +14,11 @@ import { footerLinks } from '../data/navigation';
       ))}
     </nav>
     <div style="display: flex; gap: 16px;">
-      {footerLinks.socials.map((s) => (
-        <a href={s.href} target={s.href.startsWith('mailto:') ? undefined : '_blank'} rel={s.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'} style="color: var(--color-text-secondary); font-size: 14px; text-decoration: underline; text-underline-offset: 3px;">{s.label}</a>
-      ))}
+      {footerLinks.socials.map((s) => {
+        const isMailto = s.href.startsWith('mailto:');
+        const isPlaceholder = s.href.startsWith('TODO(owner)');
+        return <a href={isMailto ? s.href : '#'} target={isMailto && !isPlaceholder ? '_blank' : undefined} rel={isMailto && !isPlaceholder ? 'noopener noreferrer' : undefined} style="color: var(--color-text-secondary); font-size: 14px; text-decoration: underline; text-underline-offset: 3px;">{s.label}</a>;
+      })}
     </div>
   </div>
   <div style="max-width: 1152px; margin: 0 auto; padding: 16px 24px 32px; color: var(--color-text-secondary); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">

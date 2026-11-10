@@ -24,7 +24,7 @@ const path = `/projects/${project.id.replace(/\.(md|mdx)$/, '')}`;
     <p style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 14px;">
       {project.data.repoUrl && <a href={project.data.repoUrl} target="_blank" rel="noopener noreferrer" style="font-weight: 600; color: var(--color-accent);">GitHub ↗</a>}
       {project.data.demoUrl && <a href={project.data.demoUrl} target="_blank" rel="noopener noreferrer" style="font-weight: 600; color: var(--color-accent);">Live demo ↗</a>}
-      <span style="color: var(--color-text-secondary);">Status: {statusLabel} — never presented as production-ready beyond its evidence.</span>
+      <span style="color: var(--color-text-secondary);">Status: {statusLabel}</span>
     </p>
     {project.data.problem && <div style="border-left: 3px solid var(--color-accent); padding-left: 16px; margin-bottom: 20px;"><h2 style="font-size: 16px;">Problem</h2><p style="color: var(--color-text-secondary);">{project.data.problem}</p></div>}
     {project.data.approach && <div style="border-left: 3px solid var(--color-accent); padding-left: 16px; margin-bottom: 20px;"><h2 style="font-size: 16px;">Technical approach</h2><p style="color: var(--color-text-secondary);">{project.data.approach}</p></div>}

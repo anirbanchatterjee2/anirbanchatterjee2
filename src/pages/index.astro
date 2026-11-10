@@ -3,15 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { profile, seoDefaults } from '../data/profile';
 import { achievements } from '../data/achievements';
-import { skillCategories } from '../data/skills';
+import { capabilityThemes } from '../data/skills';
 import { getLatestPosts, getAllProjects } from '../lib/blog';
-import { personJsonLd, breadcrumbJsonLd } from '../lib/seo';
+import { personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '../lib/seo';
 import { readingTime } from '../lib/utils';
 
 const posts = await getLatestPosts(3);
 const projects = await getAllProjects();
 const selectedAchievements = achievements.filter((a) => a.selected);
-const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])];
+const jsonLd = [
+  personJsonLd(),
+  breadcrumbJsonLd([{ name: 'Home', path: '/' }]),
+];
+const showBlog = posts.length >= 3;
 ---
 <BaseLayout
   title={seoDefaults.title}
@@ -25,29 +29,49 @@ const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])]
     <h1 class="hero-serif" style="font-size: 44px; margin-bottom: 14px; letter-spacing: -0.02em;">{profile.name}</h1>
     <p class="hero-serif" style="font-size: 19px; color: var(--color-text-secondary); margin-bottom: 22px; line-height: 1.55;">{profile.heroIntro}</p>
     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-      <a href="/experience" style="background: var(--color-accent); color: #fff; padding: 11px 20px; border-radius: 6px; font-weight: 600; text-decoration: none;">Explore My Experience</a>
-      <a href={profile.resumePdfPath} download style="border: 1px solid var(--color-border); color: var(--color-text); padding: 11px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; background: var(--color-surface);">Download Resume ↓</a>
+      <a id="resume-download" href={profile.resumePdfPath} download style="background: var(--color-accent); color: #fff; padding: 11px 20px; border-radius: 6px; font-weight: 600; text-decoration: none;">Download resume ↓</a>
+      <a href={`mailto:${profile.email}`} style="border: 1px solid var(--color-border); color: var(--color-text); padding: 11px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; background: var(--color-surface);">Get in touch</a>
     </div>
-    <p style="margin-top: 18px; display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px;">
+    <p id="resume-pdf-note" style="display: none; font-size: 12px; color: var(--color-text-secondary); margin-top: 8px;">PDF not yet deployed — use Print → Save as PDF from the Resume page.</p>
+    <script>
+      (function () {
+        const link = document.getElementById('resume-download');
+        const note = document.getElementById('resume-pdf-note');
+        if (!link || !note) return;
+        fetch(link.getAttribute('href') ?? '', { method: 'HEAD' }).then((res) => {
+          if (!res.ok) {
+            link.style.display = 'none';
+            note.style.display = 'block';
+          }
+        }).catch(() => {
+          link.style.display = 'none';
+          note.style.display = 'block';
+        });
+      })();
+    </script>
+    <p style="margin-top: 18px; font-size: 14px; color: var(--color-text-secondary);">
+      <strong>Open to:</strong> {profile.openTo.roles} · {profile.openTo.locationMobility} · {profile.openTo.availability}
+    </p>
+    <p style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px;">
       <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" style="color: var(--color-text-secondary); text-decoration: underline; text-underline-offset: 3px;">LinkedIn ↗</a>
       <a href={profile.github} target="_blank" rel="noopener noreferrer" style="color: var(--color-text-secondary); text-decoration: underline; text-underline-offset: 3px;">GitHub ↗</a>
-      <a href={`mailto:${profile.email}`} style="color: var(--color-text-secondary); text-decoration: underline; text-underline-offset: 3px;">Email</a>
     </p>
   </section>
 
-  <!-- B · Professional impact -->
+  <!-- B · Professional impact (proof strip with basis) -->
   <section aria-label="Professional impact" class="section-rule" style="padding: 36px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
     {profile.metrics.map((m) => (
       <div>
         <p class="hero-serif" style="font-size: 30px; font-weight: 700; line-height: 1.1;">{m.value}</p>
         <p style="font-size: 13px; color: var(--color-text-secondary); letter-spacing: 0.04em;">{m.label}</p>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 6px;">{m.basis}</p>
       </div>
     ))}
   </section>
 
   <!-- C · Career timeline -->
   <section aria-label="Career timeline" class="section-rule" style="padding: 40px 0;">
-    <p class="eyebrow">Professional experience</p>
+    <p class="eyebrow">Work</p>
     <h2 style="font-size: 26px; margin: 8px 0 24px;">Career progression</h2>
     <ol style="list-style: none; padding: 0; margin: 0;">
       {profile.careerTimeline.map((c) => (
@@ -65,9 +89,9 @@ const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])]
 
   <!-- D · Selected achievements -->
   <section aria-label="Selected achievements" class="section-rule" style="padding: 40px 0;">
-    <p class="eyebrow">Selected achievements</p>
+    <p class="eyebrow">Impact</p>
     <h2 style="font-size: 26px; margin: 8px 0 8px;">Measurable impact, delivery scale, and transformation</h2>
-    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Four distinct initiatives — business context, contribution, and verified outcomes.</p>
+    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Four distinct initiatives — business context, contribution, and outcome.</p>
     {selectedAchievements.map((a) => (
       <article style="border-bottom: 1px solid var(--color-border); padding: 20px 0;">
         <div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline;">
@@ -77,32 +101,33 @@ const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])]
         <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 8px;">{a.organization} · {a.year} · {a.group}</p>
         <p style="margin-bottom: 6px;">{a.description}</p>
         <p style="color: var(--color-text-secondary); font-size: 15px;"><strong style="color: var(--color-text);">Contribution:</strong> {a.contribution}</p>
+        {a.measurementBasis && <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 6px;">Basis: {a.measurementBasis}</p>}
         <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 6px;">{a.tags.join(' · ')}</p>
       </article>
     ))}
     <p style="margin-top: 18px;"><a href="/achievements" style="color: var(--color-accent); font-weight: 600;">Achievement library →</a></p>
   </section>
 
-  <!-- E · Featured engineering projects -->
+  <!-- E · Featured engineering projects (Labs & research) -->
   <section aria-label="Featured engineering projects" class="section-rule" style="padding: 40px 0;">
-    <p class="eyebrow">Featured engineering projects</p>
+    <p class="eyebrow">AI</p>
     <h2 style="font-size: 26px; margin: 8px 0 8px;">Hands-on AI engineering & research</h2>
-    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">Honest status — concept, research, and active development, never presented as production systems.</p>
+    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">Honest status — concept and active development, labelled clearly.</p>
     {projects.map((p) => <ProjectCard project={p} />)}
-    <p style="margin-top: 18px;"><a href="/projects" style="color: var(--color-accent); font-weight: 600;">All projects →</a></p>
+    <p style="margin-top: 18px;"><a href="/projects" style="color: var(--color-accent); font-weight: 600;">Labs & research →</a></p>
   </section>
 
   <!-- F · Technical expertise -->
   <section aria-label="Technical expertise" class="section-rule" style="padding: 40px 0;">
-    <p class="eyebrow">Technical expertise</p>
-    <h2 style="font-size: 26px; margin: 8px 0 24px;">Where depth and direction meet</h2>
+    <p class="eyebrow">Skills</p>
+    <h2 style="font-size: 26px; margin: 8px 0 24px;">Technical expertise</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px 32px;">
-      {skillCategories.map((cat) => (
+      {capabilityThemes.map((cat) => (
         <div style="border-top: 2px solid var(--color-text); padding-top: 14px;">
           <h3 style="font-size: 17px; margin-bottom: 4px;">{cat.title}</h3>
           <p style="font-size: 13.5px; color: var(--color-text-secondary); margin-bottom: 10px;">{cat.description}</p>
           <p style="font-size: 14px; line-height: 1.8;">
-            {cat.skills.map((s) => <span>{s.name} <span style="color: var(--color-text-secondary); font-size: 12px;">({s.level.replace(' experience', '').replace(' knowledge', '')})</span>{s !== cat.skills[cat.skills.length - 1] ? <span aria-hidden="true"> · </span> : ''}</span>)}
+            {cat.items.map((s, i) => <span>{s}{i < cat.items.length - 1 ? <span aria-hidden="true"> · </span> : ''}</span>)}
           </p>
         </div>
       ))}
@@ -110,16 +135,16 @@ const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])]
     <p style="margin-top: 18px;"><a href="/skills" style="color: var(--color-accent); font-weight: 600;">Full skill detail →</a></p>
   </section>
 
-  <!-- G · Latest writing -->
-  <section aria-label="Latest writing" class="section-rule" style="padding: 40px 0;">
-    <p class="eyebrow">Latest writing</p>
-    <h2 style="font-size: 26px; margin: 8px 0 8px;">Technical publication</h2>
-    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Automatically fetched from the content repository — latest published first.</p>
-    {posts.length > 0 ? (
+  {showBlog && (
+    <!-- G · Latest writing -->
+    <section aria-label="Latest writing" class="section-rule" style="padding: 40px 0;">
+      <p class="eyebrow">Writing</p>
+      <h2 style="font-size: 26px; margin: 8px 0 8px;">Latest articles</h2>
+      <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Latest published articles from the content repository.</p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
         {posts.map((p) => (
           <article style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 18px; background: var(--color-surface);">
-            <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px;">{p.data.category} · {p.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} · {readingTime(p.body ?? '')} min read</p>
+            <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px;">{p.data.category} · {p.data.pubDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })} · {readingTime(p.body ?? '')} min read</p>
             <h3 style="font-size: 18px; margin-bottom: 6px;">
               <a href={`/blog/${p.id.replace(/\.(md|mdx)$/, '')}`} style="color: var(--color-text); text-decoration: none;">{p.data.title}</a>
             </h3>
@@ -127,11 +152,9 @@ const jsonLd = [personJsonLd(), breadcrumbJsonLd([{ name: 'Home', path: '/' }])]
           </article>
         ))}
       </div>
-    ) : (
-      <p style="color: var(--color-text-secondary);">No articles yet — publish your first Markdown file in <code>src/content/blog/</code>.</p>
-    )}
-    <p style="margin-top: 18px;"><a href="/blog" style="color: var(--color-accent); font-weight: 600;">All writing →</a></p>
-  </section>
+      <p style="margin-top: 18px;"><a href="/blog" style="color: var(--color-accent); font-weight: 600;">All writing →</a></p>
+    </section>
+  )}
 
   <!-- H · Contact CTA -->
   <section aria-label="Contact" class="section-rule" style="padding: 48px 0 8px; max-width: 720px;">

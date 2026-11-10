@@ -1,25 +1,38 @@
 ---
 import { profile } from '../data/profile';
-import { navLinks } from '../data/navigation';
+import { getPublishedPosts } from '../lib/blog';
 import ThemeToggle from './ThemeToggle.astro';
 
 const current = Astro.url.pathname;
+const posts = await getPublishedPosts();
+const showWriting = posts.length >= 3;
+
+const navItems = [
+  { label: 'Work', href: '/experience' },
+  { label: 'Impact', href: '/achievements' },
+  { label: 'AI', href: '/projects' },
+  ...(showWriting ? [{ label: 'Writing', href: '/blog' }] : []),
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+] as const;
 ---
 <header class="no-print" style="position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--color-bg) 85%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border);">
   <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
     <a href="/" aria-label={`${profile.name} — home`} style="font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: var(--color-text); text-decoration: none; white-space: nowrap;">
       {profile.name}
     </a>
-    <nav aria-label="Primary" style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-      {navLinks.map((l) => (
-        <a
-          href={l.href}
-          aria-current={current === l.href || (l.href !== '/' && current.startsWith(l.href)) ? 'page' : undefined}
-          style={`padding: 6px 10px; border-radius: 6px; font-size: 14px; text-decoration: none; ${current === l.href ? 'color: var(--color-accent); font-weight: 600;' : 'color: var(--color-text-secondary);'}`}
-        >
-          {l.label}
-        </a>
-      ))}
+    <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+      <nav aria-label="Primary" style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+        {navItems.map((l) => (
+          <a
+            href={l.href}
+            aria-current={current === l.href ? 'page' : undefined}
+            style={`padding: 6px 10px; border-radius: 6px; font-size: 14px; text-decoration: none; ${current === l.href ? 'color: var(--color-accent); font-weight: 600;' : 'color: var(--color-text-secondary);'}`}
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
       <ThemeToggle />
       <a
         href={profile.resumePdfPath}
@@ -28,6 +41,6 @@ const current = Astro.url.pathname;
       >
         Resume ↓
       </a>
-    </nav>
+    </div>
   </div>
 </header>

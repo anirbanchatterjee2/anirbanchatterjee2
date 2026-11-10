@@ -29,11 +29,26 @@ export function personJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: profile.name,
-    jobTitle: profile.designation,
+    jobTitle: profile.headline,
     url: canonicalUrl('/'),
     email: profile.email,
     sameAs: [profile.linkedin, profile.github],
     description: profile.shortIntro,
+  };
+}
+
+/** JSON-LD WebSite schema for the homepage. */
+export function websiteJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: profile.name,
+    url: canonicalUrl('/'),
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: canonicalUrl('/blog') + '?q={search_string}',
+      'query-input': 'required name=search_string',
+    },
   };
 }
 

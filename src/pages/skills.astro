@@ -1,28 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { skillCategories } from '../data/skills';
-const levelStyle: Record<string, string> = {
-  'Professional experience': 'border-color: var(--color-accent); color: var(--color-accent);',
-  'Working knowledge': 'color: var(--color-text-secondary);',
-  'Currently exploring': 'color: var(--color-text-secondary); border-style: dashed;',
-};
+import { capabilityThemes, coreStack, currentlyBuildingWith, atsKeywords } from '../data/skills';
 ---
-<BaseLayout title="Skills" description="Technical capabilities grouped by domain — Java, Spring Boot, Angular, AWS, distributed systems and AI — with honest levels, no percentages." path="/skills">
+<BaseLayout title="Skills" description="Technical expertise — capability themes with outcomes, core stack, and currently building with. No proficiency percentages." path="/skills">
   <div style="max-width: 832px; margin: 0 auto;">
-    <h1 style="font-size: 32px; margin-bottom: 8px;">Technical skills</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Grouped by domain. Levels distinguish deep professional experience from working knowledge and current exploration — no invented percentages.</p>
-    {skillCategories.map((cat) => (
+    <p class="eyebrow">Skills</p>
+    <h1 style="font-size: 34px; margin: 8px 0 8px;">Technical expertise</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Capability themes with business outcomes, plus core production stack and areas currently being built with. No proficiency percentages.</p>
+
+    {capabilityThemes.map((theme) => (
       <section style="margin-bottom: 32px; border-bottom: 1px solid var(--color-border); padding-bottom: 24px;">
-        <h2 style="font-size: 20px;">{cat.title}</h2>
-        <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 12px;">{cat.description}</p>
-        <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px;">
-          {cat.skills.map((s) => (
-            <li style={`border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 12px; font-size: 13px; ${levelStyle[s.level] ?? ''}`}>
-              {s.name} <span style="opacity: 0.8;">· {s.level}</span>
-            </li>
+        <h2 style="font-size: 20px; margin-bottom: 6px;">{theme.title}</h2>
+        <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 10px;">{theme.outcome}</p>
+        <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+          {theme.items.map((item) => (
+            <li style="border: 1px solid var(--color-border); border-radius: 999px; padding: 5px 12px; font-size: 13px; color: var(--color-text);">{item}</li>
           ))}
         </ul>
       </section>
     ))}
+
+    <section style="margin-bottom: 32px; border-bottom: 1px solid var(--color-border); padding-bottom: 24px;">
+      <h2 style="font-size: 20px; margin-bottom: 8px;">Core stack</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 10px;">Deep production experience — for ATS and recruiter skimming.</p>
+      <p style="font-size: 14px; color: var(--color-text);">{coreStack.join(', ')}.</p>
+    </section>
+
+    <section style="margin-bottom: 32px;">
+      <h2 style="font-size: 20px; margin-bottom: 8px;">Currently building with</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 10px;">Exploration and research — not claimed as production experience.</p>
+      <p style="font-size: 14px; color: var(--color-text-secondary);">{currentlyBuildingWith.join(', ')}.</p>
+    </section>
+
+    <section>
+      <h2 style="font-size: 20px; margin-bottom: 8px;">Keywords</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 10px;">ATS-friendly plain-text inventory.</p>
+      <p style="font-size: 13px; color: var(--color-text-secondary);">{atsKeywords.join(', ')}.</p>
+    </section>
   </div>
 </BaseLayout>

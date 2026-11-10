@@ -10,7 +10,7 @@ export function slugify(input: string): string {
 
 /** Format a Date to "Nov 10, 2026". */
 export function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 /** Rough reading time at 200 wpm, min 1 minute. */

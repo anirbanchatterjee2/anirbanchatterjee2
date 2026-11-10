@@ -1,40 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { experience } from '../data/experience';
+import { employers, education, certifications } from '../data/experience';
 import { profile } from '../data/profile';
 ---
 <BaseLayout title="Experience" description="Detailed chronological experience — VP Engineering at Citi, Qualcomm and TCS architecture, 18+ years." path="/experience">
   <div style="max-width: 832px; margin: 0 auto;">
-    <p class="eyebrow">Experience</p>
+    <p class="eyebrow">Work</p>
     <h1 style="font-size: 34px; margin: 8px 0 8px;">Professional experience</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">From hands-on engineering (2008) to VP Engineering — full responsibilities, contributions and business impact. Edit in <code>src/data/experience.ts</code>.</p>
+    <p style="color: var(--color-text-secondary); margin-bottom: 8px;">Strict reverse-chronological order, nested under employer. Scope lines, S→A→R outcome bullets, and people-leadership for every role. Edit in <code>src/data/experience.ts</code>.</p>
     <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 32px;">Open to: {profile.targetRoles.join(' · ')}.</p>
-    {profile.careerTimeline.map((c) => (
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 12px; width: fit-content;">
-        <strong style="color: var(--color-text);">{c.organization}</strong> {c.dates} · {c.location}
-      </div>
+
+    {employers.map((employer) => (
+      <section style="margin-bottom: 40px;">
+        <h2 style="font-size: 24px; margin-bottom: 4px;">{employer.company}</h2>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 20px;">{employer.roles.map((r) => `${r.designation} · ${r.duration} · ${r.location}`).join(' · ')}</p>
+        {employer.gapAfter && <p style="font-size: 12.5px; color: var(--color-text-secondary); font-style: italic; margin-bottom: 20px;">{employer.gapAfter}</p>}
+        {employer.roles.map((role) => (
+          <article style="border-bottom: 1px solid var(--color-border); padding: 24px 0;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline;">
+              <h3 style="font-size: 21px;">{role.designation}</h3>
+              <span style="font-size: 14px; color: var(--color-text-secondary);">{role.duration}</span>
+            </div>
+            <p style="font-weight: 600; color: var(--color-accent);">{role.company}</p>
+            <p style="font-size: 14px; color: var(--color-text-secondary);">{role.location}</p>
+            <p style="margin: 12px 0;">{role.summary}</p>
+            {role.scope && (
+              <p style="font-size: 13.5px; color: var(--color-text-secondary); margin-bottom: 12px;"><strong style="color: var(--color-text);">Scope:</strong> {role.scope}</p>
+            )}
+            <h4 style="font-size: 15px; margin: 16px 0 8px;">Responsibilities</h4>
+            <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
+              {role.responsibilities.map((r) => <li>{r}</li>)}
+            </ul>
+            <h4 style="font-size: 15px; margin: 16px 0 8px;">Outcomes (Situation → Action → Result)</h4>
+            <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
+              {role.achievements.map((a) => <li>{a}</li>)}
+            </ul>
+            {role.peopleLeadership && (
+              <p style="font-size: 13.5px; color: var(--color-text-secondary); margin: 12px 0;"><strong style="color: var(--color-text);">People leadership:</strong> {role.peopleLeadership}</p>
+            )}
+            <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 12px;">{role.technologies.join(' · ')}</p>
+          </article>
+        ))}
+      </section>
     ))}
-    <div style="margin-top: 24px;">
-    {experience.map((e) => (
-      <article style="border-bottom: 1px solid var(--color-border); padding: 28px 0;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline;">
-          <h2 style="font-size: 21px;">{e.designation}</h2>
-          <span style="font-size: 14px; color: var(--color-text-secondary);">{e.duration}</span>
-        </div>
-        <p style="font-weight: 600; color: var(--color-accent);">{e.company}</p>
-        <p style="font-size: 14px; color: var(--color-text-secondary);">{e.location}</p>
-        <p style="margin: 12px 0;">{e.summary}</p>
-        <h3 style="font-size: 15px; margin: 16px 0 8px;">Responsibilities</h3>
-        <ul style="list-style: disc; padding-left: 20px; color: var(--color-text-secondary);">
-          {e.responsibilities.map((r) => <li>{r}</li>)}
-        </ul>
-        <h3 style="font-size: 15px; margin: 16px 0 8px;">Major projects & business impact</h3>
-        <ul style="list-style: disc; padding-left: 20px;">
-          {e.achievements.map((a) => <li>{a}</li>)}
-        </ul>
-        <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 12px;">{e.technologies.join(' · ')}</p>
-      </article>
-    ))}
-    </div>
+
+    <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px; margin-top: 32px;">Education & Certification</h2>
+    <p style="font-size: 14px; margin: 8px 0;"><strong>{education[0].degree}</strong>, {education[0].institution} — {education[0].year}</p>
+    {certifications.map((c) => <p style="font-size: 14px; margin: 8px 0;"><strong>{c.name}</strong>, {c.issuer} — {c.year}</p>)}
   </div>
 </BaseLayout>

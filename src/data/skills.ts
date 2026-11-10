@@ -1,95 +1,68 @@
-export type SkillLevel = 'Professional experience' | 'Working knowledge' | 'Currently exploring';
-
-export interface Skill {
-  name: string;
-  level: SkillLevel;
-}
-
-export interface SkillCategory {
-  title: string;
-  description: string;
-  skills: Skill[];
-}
-
 /**
- * Technical expertise — six executive-facing groups (redesign 2026).
- * All skills sourced from resumes + original spec. Levels are honest,
- * never percentages. "Currently exploring" items are explicitly NOT
- * claimed as production experience.
+ * Technical expertise — Phase 5 redesign.
+ *
+ * Six capability themes, each with a one-line outcome statement.
+ * Plus: compact "Core stack" (deep production experience) and
+ * "Currently building with" (exploration, not claimed as production).
+ * Plus: ATS-friendly plain-text keyword list.
+ *
+ * No proficiency labels, percentages, or bars.
  */
-export const skillCategories: SkillCategory[] = [
+export interface CapabilityTheme {
+  title: string;
+  outcome: string; // one-line business/engineering outcome
+  items: string[]; // technologies within this theme
+}
+
+export const capabilityThemes: CapabilityTheme[] = [
   {
     title: 'Enterprise Architecture & Engineering Leadership',
-    description: 'Org design, delivery governance, and vendor management at enterprise scale.',
-    skills: [
-      { name: 'Multi-Layer Org Leadership (50+ Engineers)', level: 'Professional experience' },
-      { name: 'Managing Managers', level: 'Professional experience' },
-      { name: 'KPI-Driven Execution (Throughput · Defect · SLA)', level: 'Professional experience' },
-      { name: 'Vendor & Onsite/Offshore Coordination', level: 'Professional experience' },
-      { name: 'Secure SaaS & Platform Modernization', level: 'Professional experience' },
-    ],
+    outcome: 'Designed and governed multi-layer engineering organisations delivering regulated, high-throughput platforms — from org design and KPI dashboards to vendor management and release governance.',
+    items: ['Multi-layer org leadership (50+ engineers)', 'Managing managers', 'KPI-driven execution (throughput · defect · SLA)', 'Vendor & onsite/offshore coordination', 'Secure SaaS & platform modernization'],
   },
   {
     title: 'Java, Python & Backend Engineering',
-    description: 'Core backend stack from enterprise Java through Python and APIs.',
-    skills: [
-      { name: 'Java', level: 'Professional experience' },
-      { name: 'Spring Boot', level: 'Professional experience' },
-      { name: 'REST APIs', level: 'Professional experience' },
-      { name: 'Python', level: 'Working knowledge' },
-      { name: 'JavaScript / TypeScript', level: 'Working knowledge' },
-      { name: 'Groovy', level: 'Working knowledge' },
-      { name: 'FastAPI', level: 'Currently exploring' },
-    ],
+    outcome: 'Built and scaled backend systems in enterprise Java, Python, and APIs — from monolithic HCM and risk platforms to microservices and streaming.',
+    items: ['Java', 'Spring Boot', 'REST APIs', 'Python', 'JavaScript / TypeScript', 'Groovy'],
   },
   {
     title: 'Distributed Systems & Microservices',
-    description: 'Messaging, search, rules and batch/streaming at high throughput.',
-    skills: [
-      { name: 'Microservices Architecture', level: 'Professional experience' },
-      { name: 'IBM MQ', level: 'Professional experience' },
-      { name: 'Apache Solr', level: 'Professional experience' },
-      { name: 'Kafka', level: 'Working knowledge' },
-      { name: 'TIBCO', level: 'Working knowledge' },
-      { name: 'Solace', level: 'Working knowledge' },
-      { name: 'Drools', level: 'Working knowledge' },
-      { name: 'Talend Batch (Petabyte-Scale)', level: 'Working knowledge' },
-    ],
+    outcome: 'Architected messaging, search, rules, and batch/streaming systems at petabyte scale — 1000+ TPS name screening, sub-second latency, billions of records.',
+    items: ['Microservices architecture', 'IBM MQ', 'Apache Solr', 'Kafka', 'TIBCO', 'Solace', 'Drools', 'Talend batch'],
   },
   {
     title: 'AWS, Cloud & Infrastructure',
-    description: 'Cloud-native architecture, containers, and infrastructure as code.',
-    skills: [
-      { name: 'AWS (EC2, ECS, VPC, IAM)', level: 'Professional experience' },
-      { name: 'Docker', level: 'Working knowledge' },
-      { name: 'Kubernetes', level: 'Working knowledge' },
-      { name: 'Jenkins / CI-CD', level: 'Working knowledge' },
-      { name: 'Terraform', level: 'Currently exploring' },
-    ],
+    outcome: 'Migrated 100+ enterprise integrations and on-premise applications to AWS cloud-native microservices — EC2, ECS, VPC, IAM, containers, CI/CD.',
+    items: ['AWS (EC2, ECS, VPC, IAM)', 'Docker', 'Kubernetes', 'Jenkins / CI-CD', 'Terraform'],
   },
   {
     title: 'AI, LLMs & Agentic Systems',
-    description: 'Current focus — RAG in production screening, AI-assisted delivery, and agentic research.',
-    skills: [
-      { name: 'RAG Pipelines', level: 'Working knowledge' },
-      { name: 'GitHub Copilot / Devin', level: 'Working knowledge' },
-      { name: 'LLMs', level: 'Currently exploring' },
-      { name: 'LangChain', level: 'Currently exploring' },
-      { name: 'LangGraph', level: 'Currently exploring' },
-      { name: 'Agentic AI', level: 'Currently exploring' },
-      { name: 'Vector Databases', level: 'Currently exploring' },
-      { name: 'MLOps', level: 'Currently exploring' },
-    ],
+    outcome: 'Applied AI where it measurably reduces cost and risk — RAG pipelines in production screening, GitHub Copilot/Devin evaluation, agentic workflow research.',
+    items: ['RAG pipelines', 'GitHub Copilot / Devin', 'LLMs', 'LangChain', 'LangGraph', 'Agentic AI', 'Vector databases', 'MLOps'],
   },
   {
     title: 'DevSecOps & Engineering Productivity',
-    description: 'Release governance, testing, and developer productivity at scale.',
-    skills: [
-      { name: 'DevSecOps Frameworks', level: 'Professional experience' },
-      { name: 'CI/CD Standardisation (+70% Velocity)', level: 'Professional experience' },
-      { name: 'Automated Testing & Code Review Governance', level: 'Working knowledge' },
-      { name: 'AI-Assisted Test Generation', level: 'Working knowledge' },
-      { name: 'Infrastructure as Code', level: 'Working knowledge' },
-    ],
+    outcome: 'Standardised CI/CD, release governance, and automated testing — 70% deployment velocity improvement, infra provisioning from weeks to hours.',
+    items: ['DevSecOps frameworks', 'CI/CD standardisation', 'Automated testing & code review governance', 'AI-assisted test generation', 'Infrastructure as code'],
   },
+];
+
+/** Deep production experience — for ATS and recruiter skimming. */
+export const coreStack = [
+  'Java', 'Spring Boot', 'REST APIs', 'Microservices', 'AWS (EC2, ECS, VPC, IAM)',
+  'Docker', 'Kubernetes', 'Apache Solr', 'IBM MQ', 'Kafka', 'Jenkins',
+  'GitHub Copilot', 'Devin', 'RAG pipelines',
+];
+
+/** Currently building with — exploration, not claimed as production experience. */
+export const currentlyBuildingWith = [
+  'LangChain', 'LangGraph', 'Agentic AI', 'Vector databases', 'MLOps', 'Terraform', 'Python',
+];
+
+/** ATS-friendly plain-text keyword list. */
+export const atsKeywords = [
+  'Java', 'Spring Boot', 'Python', 'REST APIs', 'Microservices', 'AWS', 'Docker', 'Kubernetes',
+  'Apache Solr', 'IBM MQ', 'Kafka', 'Jenkins', 'CI/CD', 'DevSecOps', 'RAG', 'LLMs', 'Agentic AI',
+  'LangChain', 'LangGraph', 'GitHub Copilot', 'Devin', 'VP Engineering', 'Engineering Leadership',
+  'Platform Modernization', 'Distributed Systems', 'AML', 'Risk Technology', 'AML/KYC',
 ];

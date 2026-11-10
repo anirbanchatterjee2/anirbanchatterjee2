@@ -5,11 +5,11 @@ const grouped = achievementGroups
   .map((g) => ({ group: g, items: achievements.filter((a) => a.group === g) }))
   .filter((g) => g.items.length > 0);
 ---
-<BaseLayout title="Achievements" description="Achievement library grouped by business impact, architecture, transformation, leadership, and recognition — context, contribution, and verified outcomes." path="/achievements">
+<BaseLayout title="Achievements" description="Achievement library grouped by business impact, architecture, transformation, leadership, and recognition — context, contribution, and outcome." path="/achievements">
   <div style="max-width: 832px; margin: 0 auto;">
-    <p class="eyebrow">Achievement library</p>
-    <h1 style="font-size: 34px; margin: 8px 0 8px;">Achievements</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 36px;">Grouped by theme so related outcomes read together. Impact figures are only those stated in source resumes. Edit in <code>src/data/achievements.ts</code>.</p>
+    <p class="eyebrow">Impact</p>
+    <h1 style="font-size: 34px; margin: 8px 0 8px;">Achievement library</h1>
+    <p style="color: var(--color-text-secondary); margin-bottom: 36px;">Grouped by theme so related outcomes read together. Impact figures are only those stated in source resumes. Each metric includes a measurement basis.</p>
     {grouped.map((g) => (
       <section aria-label={g.group} style="margin-bottom: 40px;">
         <h2 style="font-size: 22px; border-bottom: 2px solid var(--color-text); padding-bottom: 8px; margin-bottom: 16px;">{g.group}</h2>
@@ -22,6 +22,7 @@ const grouped = achievementGroups
             <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 8px;">{a.organization} · {a.year}</p>
             <p style="margin-bottom: 6px;">{a.description}</p>
             <p style="color: var(--color-text-secondary); font-size: 15px;"><strong style="color: var(--color-text);">Contribution:</strong> {a.contribution}</p>
+            {a.measurementBasis && <p style="font-size: 12.5px; color: var(--color-text-secondary); margin-top: 6px;">Basis: {a.measurementBasis}</p>}
             {a.image && <img src={a.image} alt={`Photo: ${a.title}`} width="800" height="500" loading="lazy" style="margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--color-border); max-width: 100%; height: auto;" />}
             <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">{a.tags.join(' · ')}</p>
           </article>

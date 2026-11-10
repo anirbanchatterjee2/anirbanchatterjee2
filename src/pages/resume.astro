@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
-import { experience, education, certifications } from '../data/experience';
+import { employers, education, certifications } from '../data/experience';
 import { achievements } from '../data/achievements';
-import { skillCategories } from '../data/skills';
+import { capabilityThemes, currentlyBuildingWith, atsKeywords } from '../data/skills';
 ---
 <BaseLayout title="Resume" description={`Resume of ${profile.name} — ${profile.headline}. Print-friendly and downloadable as PDF.`} path="/resume">
   <!-- Screen-only actions -->
@@ -40,17 +40,22 @@ import { skillCategories } from '../data/skills';
     <p style="margin: 16px 0;">{profile.shortIntro} Open to: {profile.targetRoles.join(' · ')}.</p>
 
     <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Experience</h2>
-    {experience.map((e) => (
+    {employers.map((emp) => (
       <section style="margin: 20px 0;">
-        <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
-          <strong>{e.designation} — {e.company}</strong>
-          <span style="font-size: 13px; color: var(--color-text-secondary);">{e.duration} · {e.location}</span>
-        </div>
-        <p style="font-size: 14px;">{e.summary}</p>
-        <ul style="list-style: disc; padding-left: 20px; font-size: 14px;">
-          {[...e.responsibilities, ...e.achievements].map((r) => <li>{r}</li>)}
-        </ul>
-        <p style="font-size: 13px; color: var(--color-text-secondary);">{e.technologies.join(' · ')}</p>
+        <h3 style="font-size: 18px; margin-bottom: 4px;">{emp.company}</h3>
+        {emp.roles.map((e) => (
+          <section style="margin: 12px 0;">
+            <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+              <strong style="font-size: 15px;">{e.designation}</strong>
+              <span style="font-size: 13px; color: var(--color-text-secondary);">{e.duration} · {e.location}</span>
+            </div>
+            <p style="font-size: 14px; margin: 6px 0;">{e.summary}</p>
+            <ul style="list-style: disc; padding-left: 20px; font-size: 14px; margin-bottom: 8px;">
+              {[...e.responsibilities, ...e.achievements].map((r) => <li>{r}</li>)}
+            </ul>
+            <p style="font-size: 13px; color: var(--color-text-secondary);">{e.technologies.join(' · ')}</p>
+          </section>
+        ))}
       </section>
     ))}
 
@@ -60,9 +65,11 @@ import { skillCategories } from '../data/skills';
     </ul>
 
     <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Skills</h2>
-    {skillCategories.map((c) => (
-      <p style="font-size: 14px; margin: 8px 0;"><strong>{c.title}:</strong> {c.skills.map((s) => `${s.name} (${s.level})`).join(' · ')}</p>
+    {capabilityThemes.map((theme) => (
+      <p style="font-size: 14px; margin: 8px 0;"><strong>{theme.title}:</strong> {theme.items.join(' · ')}</p>
     ))}
+    <p style="font-size: 14px; margin: 8px 0;"><strong>Currently building with:</strong> {currentlyBuildingWith.join(' · ')}.</p>
+    <p style="font-size: 14px; margin: 8px 0;"><strong>Keywords:</strong> {atsKeywords.join(', ')}.</p>
 
     <h2 style="font-size: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">Education & Certification</h2>
     {education.map((ed) => <p style="font-size: 14px; margin: 8px 0;"><strong>{ed.degree}</strong>, {ed.institution} — {ed.year}</p>)}

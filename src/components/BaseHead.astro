@@ -1,18 +1,22 @@
 ---
 import { profile, seoDefaults } from '../data/profile';
-import { canonicalUrl, DEFAULT_OG_IMAGE, type SeoProps } from '../lib/seo';
+import { canonicalUrl, DEFAULT_OG_IMAGE, websiteJsonLd, type SeoProps } from '../lib/seo';
 
 interface Props extends SeoProps {}
 
 const { title, description, path, image, type = 'website', noindex = false, publishedTime, updatedTime, author } = Astro.props;
 
-const fullTitle = title.includes(seoDefaults.siteName) ? title : `${title} — ${seoDefaults.siteName}`;
+// Cap full title at 60 chars for search result display.
+const fullTitle = title.includes(seoDefaults.siteName)
+  ? title
+  : `${title} — ${seoDefaults.siteName}`;
+
 const canonical = canonicalUrl(path);
 const ogImage = canonicalUrl(image ?? DEFAULT_OG_IMAGE);
 ---
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>{fullTitle}</title>
+<title>{fullTitle.length <= 60 ? fullTitle : title}</title>
 <meta name="description" content={description} />
 <meta name="author" content={author ?? seoDefaults.author} />
 <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
@@ -22,7 +26,7 @@ const ogImage = canonicalUrl(image ?? DEFAULT_OG_IMAGE);
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={seoDefaults.siteName} />
-<meta property="og:title" content={fullTitle} />
+<meta property="og:title" content={fullTitle.length <= 60 ? fullTitle : title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
@@ -35,7 +39,7 @@ const ogImage = canonicalUrl(image ?? DEFAULT_OG_IMAGE);
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:title" content={fullTitle.length <= 60 ? fullTitle : title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
