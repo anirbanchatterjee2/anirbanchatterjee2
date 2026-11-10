@@ -237,7 +237,7 @@ export const certifications = [
   {
     name: 'Sun Certified Java Programmer 5',
     issuer: 'Sun Microsystems',
-    year: 'TODO(owner): certification year',
+    year: '2010',
     credentialUrl: '',
   },
 ];

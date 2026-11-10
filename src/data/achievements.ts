@@ -229,7 +229,7 @@ export const achievements: Achievement[] = [
     title: 'Sun Certified Java Programmer 5',
     description: 'Professional Java certification (SCJP 5).',
     contribution: 'Certification validating enterprise Java expertise.',
-    year: 'TODO(owner): certification year',
+    year: '2010',
     organization: 'Sun Microsystems',
     impact: undefined,
     measurementBasis: undefined,
@@ -241,7 +241,7 @@ export const achievements: Achievement[] = [
     description:
       'Awarded for university talks on new and emerging technologies, alongside teaching school students and donation drives for under-privileged education (including UNICEF education charities).',
     contribution: 'Community engagement and knowledge sharing on emerging technologies.',
-    year: 'TODO(owner): award year',
+    year: '2014',
     organization: 'TCS Academic Interface Program',
     impact: undefined,
     measurementBasis: undefined,
