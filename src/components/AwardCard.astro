@@ -1,37 +1,56 @@
 ---
 import type { Award } from '../data/awards';
-interface Props { award: Award; }
-const { award } = Astro.props;
-const hasImage = !!award.certificateImage || !!award.awardImage || award.additionalImages.length > 0;
-const images = [];
-if (award.certificateImage) images.push({ src: award.certificateImage, caption: award.title, org: award.organisation, downloadText: 'Download certificate ↗' });
-if (award.awardImage) images.push({ src: award.awardImage, caption: `${award.title} — Ceremony`, org: award.organisation, downloadText: 'Download photo ↗' });
-award.additionalImages.forEach((img, i) => images.push({ src: img, caption: `Image ${i + 1}`, org: award.organisation, downloadText: 'Download image ↗' }));
+interface Props {
+  award: Award;
+  /** 'card' = 4:3 gallery card (default); 'preview' = 16:9 homepage preview */
+  variant?: 'card' | 'preview';
+}
+const { award, variant = 'card' } = Astro.props;
+
+const isPdf = (p?: string) => !!p && p.toLowerCase().endsWith('.pdf');
+
+const images: { src: string; caption: string; org: string; downloadText: string }[] = [];
+if (award.certificateImage) images.push({ src: award.certificateImage, caption: award.title, org: award.organisation, downloadText: 'Download certificate' });
+if (award.awardImage) images.push({ src: award.awardImage, caption: `${award.title} — Ceremony`, org: award.organisation, downloadText: 'Download photo' });
+(award.additionalImages ?? []).forEach((img, i) => images.push({ src: img, caption: `${award.title} — Image ${i + 1}`, org: award.organisation, downloadText: 'Download image' }));
+const hasImage = images.length > 0;
+const aspect = variant === 'preview' ? '16/9' : '4/3';
 ---
-<article class="card no-print" style="height: 100%; display: flex; flex-direction: column;">
-  <div style="aspect-ratio: 4/3; overflow: hidden; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-bottom: 1rem; background: var(--color-muted-bg); position: relative;">
-    {hasImage && award.certificateImage && (
+<article class="card no-print" data-category={award.category} style="height: 100%; display: flex; flex-direction: column;">
+  <div style={`aspect-ratio: ${aspect}; overflow: hidden; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-bottom: 1rem; background: var(--color-muted-bg); position: relative;`}>
+    {hasImage && isPdf(award.certificateImage) && (
+      <embed src={award.certificateImage} type="application/pdf" style="width: 100%; height: 100%; border: none;" />
+    )}
+    {!isPdf(award.certificateImage) && award.certificateImage && (
       <img src={award.certificateImage} alt={`Certificate: ${award.title}`} style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
     )}
-    {hasImage && award.awardImage && (
+    {award.awardImage && (
       <img src={award.awardImage} alt={`Award: ${award.title}`} style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
     )}
     {!hasImage && (
-      <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--color-text-secondary); font-size: 0.875rem;">Certificate image not yet uploaded</div>
+      <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.875rem; text-align: center; padding: 1rem;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h2"/></svg>
+        <span>Certificate not yet uploaded</span>
+      </div>
     )}
     {award.featured && <span style="position: absolute; top: 0.75rem; right: 0.75rem; background: var(--color-accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); text-transform: uppercase;">Featured</span>}
   </div>
   <div style="flex: 1; display: flex; flex-direction: column;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
       <span class="badge badge-category">{award.category}</span>
-      <span style="font-size: 0.875rem; color: var(--color-text-secondary);">{award.date}</span>
+      <span style="font-size: 0.875rem; color: var(--color-text-secondary); white-space: nowrap;">{award.date}</span>
     </div>
     <h3 style="font-size: 1.125rem; margin: 0 0 0.5rem 0; letter-spacing: -0.01em;">{award.title}</h3>
     <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0 0 0.5rem 0;">{award.organisation}</p>
     <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin: 0; flex: 1;">{award.description}</p>
     {hasImage && (
-      <button type="button" onclick={`window.openLightbox(${JSON.stringify(images)}, 0)`} style="margin-top: auto; background: var(--color-accent); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; font-weight: 600;">
-        View certificate ↗
+      <button
+        type="button"
+        data-lightbox-images={JSON.stringify(images)}
+        class="lightbox-trigger"
+        style="margin-top: auto; background: var(--color-accent); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; font-weight: 600;"
+      >
+        View certificate ({images.length} image{images.length > 1 ? 's' : ''}) ↗
       </button>
     )}
     {award.verificationUrl && (

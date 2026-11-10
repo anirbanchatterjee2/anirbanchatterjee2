@@ -1,36 +1,39 @@
-# Award & Certificate Images
+# Award & Certificate Files
 
-Place certificate and award photos here. Reference them in `src/content/awards/*.md` using the `certificateImage` and `awardImage` fields.
+Certificate PDFs and award photos used on `/awards` and the homepage preview.
 
-## Supported formats
-- JPG, JPEG, PNG, WEBP (images)
-- PDF (certificates — browsers will display them; for best results convert to image)
+## Files currently in use
 
-## Naming convention
-Use descriptive, lowercase filenames with hyphens:
-- `qualcomm-appreciation.jpg`
-- `lnt-star-team-award.pdf`
-- `tcs-star-of-month-oct.png`
+| File | Award entry (`src/content/awards/`) |
+|------|--------------------------------------|
+| `qualcomm-appreciation.pdf` | `qualcomm-appreciation.md` |
+| `aip-anchor.pdf` | `aip-anchor-award.md` (primary) |
+| `aip-anchor-2.pdf` | `aip-anchor-award.md` (additional) |
+| `star-team-award.pdf` | `star-team-award.md` (primary) |
+| `star-team-award-2.pdf` | `star-team-award.md` (additional) |
+| `star-of-the-month-oct.pdf` | `star-of-the-month-oct.md` |
+| `on-the-spot-8th-march.pdf` | `on-the-spot-8th-march.md` (primary) |
+| `on-the-spot-8th-march-2.pdf` | `on-the-spot-8th-march.md` (additional) |
 
-## How awards appear on the site
+## Adding a new certificate (no code changes needed)
 
-1. Add your image file to this folder.
-2. Edit the matching award entry in `src/content/awards/` and set:
-   - `certificateImage: /images/awards/your-file.jpg`
-   - `awardImage: /images/awards/your-ceremony-photo.jpg` (optional)
-3. Run `npm run build` and the image will appear on `/awards` and the homepage preview.
+1. Drop the file here (JPG, PNG, WEBP or PDF). Use a lowercase-hyphen filename,
+   e.g. `citi-engineer-excellence.pdf`.
+2. Either:
+   - open the admin UI at `/admin/` → **Awards & Recognition** → set
+     **Certificate Image**, or
+   - edit the award's `.md` file and add:
+     `certificateImage: "/images/awards/your-file.pdf"`
+3. Run `npm run build` (or let Netlify rebuild) — the thumbnail, "View
+   certificate" button and full-screen viewer pick it up automatically.
 
-## Current award entries (edit to add images)
+PDF certificates render inline in the card thumbnail and in the full-screen
+lightbox (zoom via the viewer, ← → to browse, Esc to close, download link at
+the bottom). Images are shown with `object-fit: cover` in cards and
+`object-fit: contain` in the lightbox so certificates are never cropped.
 
-| Award ID | File to edit | Suggested image |
-|----------|-------------|-----------------|
-| `qualcomm-appreciation` | `src/content/awards/qualcomm-appreciation.md` | `/images/awards/qualcomm-appreciation.*` |
-| `lnt-star-team-award-2` | `src/content/awards/lnt-star-team-award-2.md` | `/images/awards/lnt-star-team-award-2.*` |
-| `aip-anchor-award` | `src/content/awards/aip-anchor-award.md` | `/images/awards/aip-anchor-award.*` |
-| `on-the-spot-8th-march` | `src/content/awards/on-the-spot-8th-march.md` | `/images/awards/on-the-spot-8th-march.*` |
-| `star-of-the-month-oct` | `src/content/awards/star-of-the-month-oct.md` | `/images/awards/star-of-the-month-oct.*` |
-| `star-team-award` | `src/content/awards/star-team-award.md` | `/images/awards/star-team-award.*` |
+## Notes
 
-## Profile photo
-
-Upload your headshot to `public/images/profile/anirban-chatterjee.jpg` and it will appear on the homepage hero and About page automatically.
+- Originals are preserved as uploaded — nothing is re-encoded.
+- Keep files under ~2 MB each for fast page loads.
+- Profile photo lives in `../profile/anirban-chatterjee.jpg`.

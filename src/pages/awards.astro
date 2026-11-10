@@ -13,9 +13,9 @@ import { getCollection } from 'astro:content';
     
     <!-- Filters -->
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
-      <button onclick="filterAwards('all')" id="filter-all" class="badge badge-category" style="cursor: pointer; border-color: var(--color-accent); color: var(--color-accent);">All</button>
+      <button type="button" onclick="filterAwards('all')" id="filter-all" class="badge filter-btn" style="cursor: pointer; border-color: var(--color-accent); color: var(--color-accent);">All</button>
       {awardCategories.map((cat) => (
-        <button onclick={`filterAwards('${cat}')}`} id={`filter-${cat.replace(/\s/g, '-').toLowerCase()}`} class="badge badge-category" style="cursor: pointer;">{cat}</button>
+        <button type="button" onclick={`filterAwards('${cat}')`} id={`filter-${cat.replace(/\s/g, '-').toLowerCase()}`} class="badge filter-btn" style="cursor: pointer; border: 1px solid var(--color-border); color: var(--color-text-secondary);">{cat}</button>
       ))}
     </div>
 
@@ -38,19 +38,19 @@ import { getCollection } from 'astro:content';
   <script>
     function filterAwards(category) {
       const cards = document.querySelectorAll('#awards-grid > article');
-      const buttons = document.querySelectorAll('.badge-category');
+      const buttons = document.querySelectorAll('.filter-btn');
       buttons.forEach(b => {
         b.style.borderColor = 'var(--color-border)';
         b.style.color = 'var(--color-text-secondary)';
       });
-      document.getElementById(`filter-${category.replace(/\s/g, '-').toLowerCase()}`).style.borderColor = 'var(--color-accent)';
-      document.getElementById(`filter-${category.replace(/\s/g, '-').toLowerCase()}`).style.color = 'var(--color-accent)';
+      const active = document.getElementById(`filter-${category.replace(/\s/g, '-').toLowerCase()}`);
+      if (active) {
+        active.style.borderColor = 'var(--color-accent)';
+        active.style.color = 'var(--color-accent)';
+      }
       cards.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+        const match = category === 'all' || card.getAttribute('data-category') === category;
+        card.style.display = match ? 'flex' : 'none';
       });
     }
   </script>
