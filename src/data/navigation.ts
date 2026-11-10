@@ -4,12 +4,18 @@ export interface NavLink {
 }
 
 export const navLinks: NavLink[] = [
-  { label: 'Work', href: '/experience' },
-  { label: 'Impact', href: '/achievements' },
-  { label: 'AI', href: '/projects' },
-  { label: 'Writing', href: '/blog' },
+  { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Experience', href: '/experience' },
+  { label: 'Awards', href: '/awards' },
+  { label: 'Achievements', href: '/achievements' },
+  { label: 'Projects & Research', href: '/research' },
+  { label: 'Technical Blogs', href: '/blog' },
   { label: 'Contact', href: '/contact' },
+];
+
+export const secondaryNavLinks: NavLink[] = [
+  { label: 'Resume', href: '/resume' },
 ];
 
 export const footerLinks = {

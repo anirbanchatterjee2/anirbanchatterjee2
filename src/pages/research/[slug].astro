@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { seoDefaults } from '../../data/profile';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('research', ({ data }) => data.draft !== true);
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const path = `/research/${project.id}`;
+---
+<BaseLayout title={project.data.name} description={project.data.description} path={path} image={project.data.coverImage} jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Projects & Research', path: '/research' }, { name: project.data.name, path }])]}>
+  <article style="max-width: 760px; margin: 0 auto;">
+    <SectionHeading title={project.data.name} subtitle={`${project.data.category} · ${project.data.status}`} />
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+      {project.data.techStack.map((t) => (
+        <span style="font-size: 0.75rem; color: var(--color-text-secondary); border: 1px solid var(--color-border); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm);">{t}</span>
+      ))}
+    </div>
+    <p style="font-size: 1.05rem; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 2rem;">{project.data.description}</p>
+    
+    {project.data.researchObjective && (
+      <div style="border-left: 3px solid var(--color-accent-secondary); padding-left: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; margin: 0 0 0.5rem 0;">Research Objective</h3>
+        <p style="color: var(--color-text-secondary); margin: 0; font-size: 0.95rem;">{project.data.researchObjective}</p>
+      </div>
+    )}
+
+    {project.data.architectureDiagram && (
+      <div style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Architecture</h3>
+        <img src={project.data.architectureDiagram} alt={`Architecture: ${project.data.name}`} style="width: 100%; max-width: 700px; border: 1px solid var(--color-border); border-radius: var(--radius);" loading="lazy" />
+      </div>
+    )}
+
+    <div class="prose" style="margin-bottom: 2rem;"><Content /></div>
+
+    {project.data.repoUrl && (
+      <div style="margin-top: 2rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-muted-bg);">
+        <h4 style="font-size: 0.875rem; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Repository</h4>
+        <a href={project.data.repoUrl} target="_blank" rel="noopener noreferrer" class="link-accent">{project.data.repoUrl}</a>
+      </div>
+    )}
+    {project.data.demoUrl && (
+      <div style="margin-top: 1rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-muted-bg);">
+        <h4 style="font-size: 0.875rem; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Live Demo</h4>
+        <a href={project.data.demoUrl} target="_blank" rel="noopener noreferrer" class="link-accent">{project.data.demoUrl}</a>
+      </div>
+    )}
+    <p style="margin-top: 2rem;"><a href="/research" class="link-accent">← All research projects</a></p>
+  </article>
+</BaseLayout>

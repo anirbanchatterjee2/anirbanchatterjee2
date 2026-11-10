@@ -1,0 +1,10 @@
+---
+import type { Award } from '../data/awards';
+interface Props { awards: Award[]; }
+const { awards } = Astro.props;
+---
+<section class="section-rule" style="padding-top: 0;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+    {awards.map((award) => <AwardCard award={award} />)}
+  </div>
+</section>

@@ -1,0 +1,127 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: 'Create {{collection}} {{slug}}'
+    update: 'Update {{collection}} {{slug}}'
+    delete: 'Delete {{collection}} {{slug}}'
+    uploadMedia: 'Upload {{path}}'
+    deleteMedia: 'Delete {{path}}'
+media_folder: 'public/images/uploads'
+public_folder: '/images/uploads'
+site_url: 'https://anirban-chatterjee.netlify.app'
+display_url: 'https://anirban-chatterjee.netlify.app'
+
+publish_mode: editorial_workflow
+
+slug:
+  encoding: 'ascii'
+  clean_accents: true
+  sanitize_replacements:
+    - replacement: '-'
+      regex: /[^a-z0-9]+/i
+
+collections:
+  - name: 'awards'
+    label: 'Awards & Recognition'
+    label_singular: 'Award'
+    folder: 'src/content/awards'
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — {{organisation}} — {{date}}'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string', required: true }
+      - { label: 'Organisation', name: 'organisation', widget: 'string', required: true }
+      - { label: 'Date', name: 'date', widget: 'datetime', required: true, date_format: 'MMMM D, YYYY', time_format: false }
+      - { label: 'Category', name: 'category', widget: 'select', required: true, options: ['Corporate Awards', 'Engineering Excellence', 'Leadership Recognition', 'Innovation Awards', 'Technical Certifications', 'Other Recognition'] }
+      - { label: 'Description', name: 'description', widget: 'text', required: true }
+      - { label: 'Context', name: 'context', widget: 'text' }
+      - { label: 'Contribution', name: 'contribution', widget: 'text' }
+      - { label: 'Certificate Image', name: 'certificateImage', widget: 'image', required: false }
+      - { label: 'Award Image', name: 'awardImage', widget: 'image', required: false }
+      - { label: 'Additional Images', name: 'additionalImages', widget: 'list', required: false, fields: [{ label: 'Image', name: 'image', widget: 'image' }] }
+      - { label: 'Verification URL', name: 'verificationUrl', widget: 'string', required: false }
+      - { label: 'Featured on Homepage', name: 'featured', widget: 'boolean', default: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+
+  - name: 'achievements'
+    label: 'Achievements'
+    label_singular: 'Achievement'
+    folder: 'src/content/achievements'
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — {{organization}} — {{year}}'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string', required: true }
+      - { label: 'Description', name: 'description', widget: 'text', required: true }
+      - { label: 'Contribution', name: 'contribution', widget: 'text', required: true }
+      - { label: 'Year', name: 'year', widget: 'string', required: true }
+      - { label: 'Organization', name: 'organization', widget: 'string', required: true }
+      - { label: 'Impact', name: 'impact', widget: 'string', required: false }
+      - { label: 'Measurement Basis', name: 'measurementBasis', widget: 'text', required: false }
+      - { label: 'Tags', name: 'tags', widget: 'list', required: false }
+      - { label: 'Group', name: 'group', widget: 'select', required: true, options: ['Business Impact', 'Architecture & Engineering', 'Technology Transformation', 'Engineering Leadership', 'Leadership Outcomes', 'Awards & Recognition'] }
+      - { label: 'Featured on Homepage', name: 'featured', widget: 'boolean', default: false }
+      - { label: 'Image', name: 'image', widget: 'image', required: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+
+  - name: 'research'
+    label: 'Projects & Research'
+    label_singular: 'Research Project'
+    folder: 'src/content/research'
+    create: true
+    slug: '{{slug}}'
+    summary: '{{name}} — {{status}}'
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string', required: true }
+      - { label: 'Description', name: 'description', widget: 'text', required: true }
+      - { label: 'Research Objective', name: 'researchObjective', widget: 'text', required: true }
+      - { label: 'Category', name: 'category', widget: 'select', required: true, options: ['Agentic AI', 'LLM Engineering', 'Multimodal AI', 'Distributed Systems', 'Software Architecture', 'Developer Tools', 'Experimental Engineering'] }
+      - { label: 'Status', name: 'status', widget: 'select', required: true, options: ['Concept', 'Research', 'Prototype', 'In Development', 'Completed', 'Archived'] }
+      - { label: 'Tech Stack', name: 'techStack', widget: 'list', required: false }
+      - { label: 'Repo URL', name: 'repoUrl', widget: 'string', required: false }
+      - { label: 'Demo URL', name: 'demoUrl', widget: 'string', required: false }
+      - { label: 'Cover Image', name: 'coverImage', widget: 'image', required: false }
+      - { label: 'Architecture Diagram', name: 'architectureDiagram', widget: 'image', required: false }
+      - { label: 'Start Date', name: 'startDate', widget: 'string', required: false }
+      - { label: 'Featured', name: 'featured', widget: 'boolean', default: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+
+  - name: 'blog'
+    label: 'Technical Blogs'
+    label_singular: 'Article'
+    folder: 'src/content/blog'
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — {{pubDate}}'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string', required: true }
+      - { label: 'Description', name: 'description', widget: 'text', required: true }
+      - { label: 'Publication Date', name: 'pubDate', widget: 'datetime', required: true, date_format: 'MMMM D, YYYY', time_format: false }
+      - { label: 'Author', name: 'author', widget: 'string', default: 'Anirban Chatterjee' }
+      - { label: 'Category', name: 'category', widget: 'select', required: true, options: ['AI Engineering', 'Agentic AI', 'LLM Engineering', 'RAG', 'Distributed Systems', 'System Design', 'Software Architecture', 'Cloud Engineering', 'Engineering Leadership', 'Technology Research'] }
+      - { label: 'Tags', name: 'tags', widget: 'list', required: false }
+      - { label: 'Cover Image', name: 'coverImage', widget: 'image', required: false }
+      - { label: 'Featured', name: 'featured', widget: 'boolean', default: false }
+      - { label: 'SEO Title', name: 'seoTitle', widget: 'string', required: false }
+      - { label: 'SEO Description', name: 'seoDescription', widget: 'text', required: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+      - { label: 'Body', name: 'body', widget: 'markdown', required: true }
+
+  - name: 'profile'
+    label: 'Profile Settings'
+    label_singular: 'Profile'
+    file: 'src/data/profile.ts'
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string', required: true }
+      - { label: 'Headline', name: 'headline', widget: 'string', required: true }
+      - { label: 'Designation', name: 'designation', widget: 'string', required: true }
+      - { label: 'Location', name: 'location', widget: 'string', required: true }
+      - { label: 'Email', name: 'email', widget: 'string', required: true }
+      - { label: 'LinkedIn', name: 'linkedin', widget: 'string', required: true }
+      - { label: 'GitHub', name: 'github', widget: 'string', required: true }
+      - { label: 'Hero Intro', name: 'heroIntro', widget: 'text', required: true }
+      - { label: 'Short Intro', name: 'shortIntro', widget: 'text', required: true }
+      - { label: 'Open to Roles', name: 'openTo.roles', widget: 'string', required: true }
+      - { label: 'Open to Location/Mobility', name: 'openTo.locationMobility', widget: 'string', required: true }
+      - { label: 'Open to Availability', name: 'openTo.availability', widget: 'string', required: true }

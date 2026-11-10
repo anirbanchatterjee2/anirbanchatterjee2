@@ -1,71 +1,72 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { getPublishedPosts, getAllTags, getAllCategories } from '../../lib/blog';
 import { humanize } from '../../lib/utils';
+import { seoDefaults } from '../../data/profile';
+import { breadcrumbJsonLd } from '../../lib/seo';
 
 const posts = await getPublishedPosts();
 const tags = await getAllTags();
 const categories = await getAllCategories();
-const active = 'all';
 ---
-<BaseLayout title="Blog" description="Technical articles on software engineering, architecture, AI, RAG and agentic systems — the canonical publication." path="/blog">
-  <div style="max-width: 832px; margin: 0 auto;">
-    <h1 style="font-size: 32px; margin-bottom: 8px;">Technical blog</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 24px;">Every article has a permanent URL and a LinkedIn-ready preview. Search and filter by category or tag below.</p>
-
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-      <button type="button" data-filter="all" aria-pressed="true" style="border: 1px solid var(--color-accent); background: var(--color-accent); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 13px;">All</button>
+<BaseLayout title="Technical Blogs — Anirban Chatterjee" description="Technical articles on software engineering, architecture, AI, RAG and agentic systems." path="/blog" jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Technical Blogs', path: '/blog' }])]}>
+  <div style="max-width: 1152px; margin: 0 auto;">
+    <SectionHeading title="Technical Blogs" subtitle="Writing on software engineering, architecture, AI, RAG and agentic systems." />
+    
+    <!-- Filters -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+      <button onclick="filterBlog('all')" id="filter-blog-all" class="badge badge-category" style="cursor: pointer; border-color: var(--color-accent); color: var(--color-accent);">All</button>
       {categories.map((c) => (
-        <button type="button" data-filter={c.category} style="border: 1px solid var(--color-border); background: transparent; color: var(--color-text); padding: 6px 12px; border-radius: 999px; font-size: 13px;">{humanize(c.category)} ({c.count})</button>
+        <button onclick="filterBlog('{c.category}')" id={`filter-blog-${c.category.toLowerCase().replace(/\s/g, '-')}`} class="badge badge-category" style="cursor: pointer;">{humanize(c.category)}</button>
       ))}
     </div>
-    <input id="blog-search" type="search" placeholder="Search title, description or tag…" aria-label="Search articles" style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 6px; margin-bottom: 24px; background: var(--color-surface); color: var(--color-text); font-size: 15px;" />
-    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 8px;">
-      Tags: {tags.map((t) => <a href={`/blog/tags/${t.tag}`} style="color: var(--color-accent); text-decoration: none; margin-right: 8px;">#{humanize(t.tag)}</a>)}
-    </p>
+    <input id="blog-search" type="search" placeholder="Search articles…" aria-label="Search articles" style="width: 100%; max-width: 400px; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); font-size: 0.9rem; margin-bottom: 2rem;" />
 
-    <div id="blog-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
-      {posts.map((p) => (
-        <div data-category={p.data.category.toLowerCase().replace(/\s+/g, '-')} data-search={`${p.data.title} ${p.data.description} ${p.data.tags.join(' ')}`.toLowerCase()}>
-          <ArticleCard post={p} />
-        </div>
-      ))}
+    <div id="blog-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+      {posts.map((p) => {
+        const slug = p.id.replace(/\.(md|mdx)$/, '');
+        return (
+          <article class="card" data-category={p.data.category} data-search={`${p.data.title} ${p.data.description} ${p.data.tags.join(' ')}`.toLowerCase()}>
+            <div style="aspect-ratio: 16/9; overflow: hidden; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-bottom: 1rem; background: var(--color-muted-bg);">
+              {p.data.coverImage && (
+                <img src={p.data.coverImage} alt={`Cover: ${p.data.title}`} style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
+              )}
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span class="badge badge-category">{p.data.category}</span>
+              <span style="font-size: 0.75rem; color: var(--color-text-secondary);">{p.data.pubDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+            </div>
+            <h3 style="font-size: 1.125rem; margin: 0 0 0.5rem 0; letter-spacing: -0.01em;">
+              <a href={`/blog/${slug}`} style="color: var(--color-text); text-decoration: none;">{p.data.title}</a>
+            </h3>
+            <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin: 0;">{p.data.description}</p>
+          </article>
+        );
+      })}
     </div>
-    <p id="blog-empty" hidden style="color: var(--color-text-secondary);">No articles match your search.</p>
+    {posts.length === 0 && (
+      <p style="text-align: center; color: var(--color-text-secondary); padding: 3rem;">No published articles yet.</p>
+    )}
   </div>
   <script>
-    const input = document.getElementById('blog-search');
-    const items = [...document.querySelectorAll('[data-search]')];
-    const empty = document.getElementById('blog-empty');
-    let activeFilter = 'all';
-    function apply() {
-      const q = (input?.value ?? '').toLowerCase();
-      let visible = 0;
-      for (const el of items) {
-        const cat = el.getAttribute('data-category');
-        const hay = el.getAttribute('data-search') ?? '';
-        const matchCat = activeFilter === 'all' || cat === activeFilter;
-        const matchQ = !q || hay.includes(q);
-        const show = matchCat && matchQ;
-        el.hidden = !show;
-        if (show) visible++;
-      }
-      if (empty) empty.hidden = visible !== 0;
-    }
-    input?.addEventListener('input', apply);
-    document.querySelectorAll('[data-filter]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        activeFilter = btn.getAttribute('data-filter') ?? 'all';
-        document.querySelectorAll('[data-filter]').forEach((b) => {
-          const isActive = b.getAttribute('data-filter') === activeFilter;
-          b.setAttribute('aria-pressed', String(isActive));
-          b.style.border = isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)';
-          b.style.background = isActive ? 'var(--color-accent)' : 'transparent';
-          b.style.color = isActive ? '#fff' : 'var(--color-text)';
-        });
-        apply();
+    function filterBlog(category) {
+      const cards = document.querySelectorAll('#blog-grid > article');
+      const buttons = document.querySelectorAll('.badge-category');
+      buttons.forEach(b => {
+        b.style.borderColor = 'var(--color-border)';
+        b.style.color = 'var(--color-text-secondary)';
       });
-    });
+      document.getElementById(`filter-blog-${category.toLowerCase().replace(/\s/g, '-')}`).style.borderColor = 'var(--color-accent)';
+      document.getElementById(`filter-blog-${category.toLowerCase().replace(/\s/g, '-')}`).style.color = 'var(--color-accent)';
+      const q = document.getElementById('blog-search').value.toLowerCase();
+      cards.forEach(card => {
+        const catMatch = category === 'all' || card.getAttribute('data-category') === category;
+        const searchMatch = !q || card.getAttribute('data-search').includes(q);
+        card.style.display = (catMatch && searchMatch) ? 'flex' : 'none';
+      });
+    }
+    document.getElementById('blog-search').addEventListener('input', () => filterBlog('all'));
   </script>
 </BaseLayout>

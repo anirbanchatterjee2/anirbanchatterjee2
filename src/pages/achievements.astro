@@ -1,33 +1,46 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { achievements, achievementGroups } from '../data/achievements';
-const grouped = achievementGroups
-  .map((g) => ({ group: g, items: achievements.filter((a) => a.group === g) }))
-  .filter((g) => g.items.length > 0);
+import SectionHeading from '../components/SectionHeading.astro';
+import { achievementGroups } from '../data/achievements';
+import { seoDefaults } from '../data/profile';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { getCollection } from 'astro:content';
 ---
-<BaseLayout title="Achievements" description="Achievement library grouped by business impact, architecture, transformation, leadership, and recognition — context, contribution, and outcome." path="/achievements">
+<BaseLayout title="Achievements — Anirban Chatterjee" description="Achievement library grouped by business impact, architecture, transformation, leadership, and recognition." path="/achievements" jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Achievements', path: '/achievements' }])]}>
   <div style="max-width: 832px; margin: 0 auto;">
-    <p class="eyebrow">Impact</p>
-    <h1 style="font-size: 34px; margin: 8px 0 8px;">Achievement library</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 36px;">Grouped by theme so related outcomes read together. Impact figures are only those stated in source resumes. Each metric includes a measurement basis.</p>
-    {grouped.map((g) => (
-      <section aria-label={g.group} style="margin-bottom: 40px;">
-        <h2 style="font-size: 22px; border-bottom: 2px solid var(--color-text); padding-bottom: 8px; margin-bottom: 16px;">{g.group}</h2>
-        {g.items.map((a) => (
-          <article style="border-bottom: 1px solid var(--color-border); padding: 18px 0;">
-            <div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline;">
-              <h3 style="font-size: 19px;">{a.title}</h3>
-              {a.impact && <span style="font-weight: 700; color: var(--color-accent); white-space: nowrap;">{a.impact}</span>}
-            </div>
-            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 8px;">{a.organization} · {a.year}</p>
-            <p style="margin-bottom: 6px;">{a.description}</p>
-            <p style="color: var(--color-text-secondary); font-size: 15px;"><strong style="color: var(--color-text);">Contribution:</strong> {a.contribution}</p>
-            {a.measurementBasis && <p style="font-size: 12.5px; color: var(--color-text-secondary); margin-top: 6px;">Basis: {a.measurementBasis}</p>}
-            {a.image && <img src={a.image} alt={`Photo: ${a.title}`} width="800" height="500" loading="lazy" style="margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--color-border); max-width: 100%; height: auto;" />}
-            <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">{a.tags.join(' · ')}</p>
-          </article>
-        ))}
-      </section>
-    ))}
+    <SectionHeading title="Achievement Library" subtitle="Engineering and business accomplishments — context, contribution, and verified outcomes." />
+    {(async () => {
+      const entries = await getCollection('achievements', ({ data }) => data.draft !== true);
+      const grouped = achievementGroups
+        .map((g) => ({ group: g, items: entries.filter((e) => e.data.group === g) }))
+        .filter((g) => g.items.length > 0);
+      return grouped.map((g) => (
+        <section aria-label={g.group} style="margin-bottom: 3rem;">
+          <h2 style="font-size: 1.5rem; border-bottom: 2px solid var(--color-text); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">{g.group}</h2>
+          {g.items.map((entry) => {
+            const a = entry.data;
+            return (
+              <article class="card" style="border-left: 3px solid var(--color-accent); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem;">
+                  <h3 style="font-size: 1.125rem; margin: 0; letter-spacing: -0.01em;">{a.title}</h3>
+                  {a.impact && <span style="font-size: 0.875rem; font-weight: 700; color: var(--color-accent); white-space: nowrap;">{a.impact}</span>}
+                </div>
+                <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0.25rem 0 0.75rem 0;">{a.organization} · {a.year}</p>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin: 0 0 1rem 0;">{a.description}</p>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin: 0;"><strong style="color: var(--color-text);">Contribution:</strong> {a.contribution}</p>
+                {a.measurementBasis && (
+                  <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.5rem;">Basis: {a.measurementBasis}</p>
+                )}
+                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                  {a.tags.map((tag) => (
+                    <span style="font-size: 0.75rem; color: var(--color-accent); border: 1px solid rgba(22, 58, 95, 0.2); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm);">{tag}</span>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      ));
+    })()}
   </div>
 </BaseLayout>

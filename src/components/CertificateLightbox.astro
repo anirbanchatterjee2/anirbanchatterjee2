@@ -1,0 +1,75 @@
+---
+---
+<div id="certificate-lightbox" class="no-print" style="display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px);">
+  <div style="position: absolute; top: 1.5rem; right: 2rem; z-index: 10; cursor: pointer; color: #fff; font-size: 1.5rem; line-height: 1;" aria-label="Close" onclick="document.getElementById('certificate-lightbox').style.display='none';">✕</div>
+  <div style="position: absolute; top: 1.5rem; left: 2rem; z-index: 10; cursor: pointer; color: #fff; font-size: 1.25rem;" aria-label="Previous" onclick="lightboxPrev();">‹</div>
+  <div style="position: absolute; top: 1.5rem; right: 4.5rem; z-index: 10; cursor: pointer; color: #fff; font-size: 1.25rem;" aria-label="Next" onclick="lightboxNext();">›</div>
+  <div style="display: flex; align-items: center; justify-content: center; height: 100%; padding: 2rem;">
+    <img id="lightbox-image" src="" alt="" style="max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: var(--radius); box-shadow: var(--shadow-lg);" />
+  </div>
+  <div style="position: absolute; bottom: 2rem; left: 0; right: 0; text-align: center; color: #fff;">
+    <p id="lightbox-caption" style="font-size: 1rem; font-weight: 500;"></p>
+    <p id="lightbox-org" style="font-size: 0.9rem; color: #94a3b8; margin-top: 0.25rem;"></p>
+    <a id="lightbox-download" href="" download style="display: inline-block; margin-top: 1rem; color: #fff; text-decoration: underline; font-size: 0.9rem;">Download original ↗</a>
+  </div>
+</div>
+<script>
+  let lightboxItems = [];
+  let lightboxIndex = 0;
+
+  function openLightbox(items, index) {
+    lightboxItems = items;
+    lightboxIndex = index;
+    const box = document.getElementById('certificate-lightbox');
+    const img = document.getElementById('lightbox-image');
+    const caption = document.getElementById('lightbox-caption');
+    const org = document.getElementById('lightbox-org');
+    const download = document.getElementById('lightbox-download');
+    const item = items[index];
+    img.src = item.src;
+    caption.textContent = item.caption;
+    org.textContent = item.org;
+    download.href = item.src;
+    download.textContent = item.downloadText ?? 'Download original ↗';
+    box.style.display = 'flex';
+  }
+
+  function lightboxPrev() {
+    lightboxIndex = (lightboxIndex - 1 + lightboxItems.length) % lightboxItems.length;
+    const item = lightboxItems[lightboxIndex];
+    const img = document.getElementById('lightbox-image');
+    const caption = document.getElementById('lightbox-caption');
+    const org = document.getElementById('lightbox-org');
+    const download = document.getElementById('lightbox-download');
+    img.src = item.src;
+    caption.textContent = item.caption;
+    org.textContent = item.org;
+    download.href = item.src;
+    download.textContent = item.downloadText ?? 'Download original ↗';
+  }
+
+  function lightboxNext() {
+    lightboxIndex = (lightboxIndex + 1) % lightboxItems.length;
+    const item = lightboxItems[lightboxIndex];
+    const img = document.getElementById('lightbox-image');
+    const caption = document.getElementById('lightbox-caption');
+    const org = document.getElementById('lightbox-org');
+    const download = document.getElementById('lightbox-download');
+    img.src = item.src;
+    caption.textContent = item.caption;
+    org.textContent = item.org;
+    download.href = item.src;
+    download.textContent = item.downloadText ?? 'Download original ↗';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const box = document.getElementById('certificate-lightbox');
+    if (!box || box.style.display !== 'flex') return;
+    if (e.key === 'Escape') box.style.display = 'none';
+    if (e.key === 'ArrowLeft') lightboxPrev();
+    if (e.key === 'ArrowRight') lightboxNext();
+  });
+
+  // Expose globally for inline handlers
+  window.openLightbox = openLightbox;
+</script>

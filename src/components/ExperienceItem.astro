@@ -1,0 +1,29 @@
+---
+import type { ExperienceItem } from '../data/experience';
+interface Props { role: ExperienceItem; employer: string; }
+const { role, employer } = Astro.props;
+---
+<article style="border-bottom: 1px solid var(--color-border); padding: 1.5rem 0;">
+  <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+    <h3 style="font-size: 1.125rem; margin: 0; letter-spacing: -0.01em;">{role.designation}</h3>
+    <span style="font-size: 0.875rem; color: var(--color-text-secondary);">{role.duration}</span>
+  </div>
+  <p style="font-size: 0.95rem; color: var(--color-accent); font-weight: 600; margin: 0 0 0.5rem 0;">{employer}</p>
+  <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0 0 1rem 0;">{role.location}</p>
+  <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin: 0 0 1rem 0;">{role.summary}</p>
+  {role.scope && (
+    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 1rem;"><strong style="color: var(--color-text);">Scope:</strong> {role.scope}</p>
+  )}
+  <h4 style="font-size: 0.875rem; margin: 1rem 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Responsibilities</h4>
+  <ul style="list-style: disc; padding-left: 1.25rem; margin: 0 0 1rem 0; color: var(--color-text-secondary); font-size: 0.9rem;">
+    {role.responsibilities.map((r) => <li style="margin-bottom: 0.25rem;">{r}</li>)}
+  </ul>
+  <h4 style="font-size: 0.875rem; margin: 1rem 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Outcomes</h4>
+  <ul style="list-style: disc; padding-left: 1.25rem; margin: 0 0 1rem 0; color: var(--color-text-secondary); font-size: 0.9rem;">
+    {role.achievements.map((a) => <li style="margin-bottom: 0.25rem;">{a}</li>)}
+  </ul>
+  {role.peopleLeadership && (
+    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;"><strong style="color: var(--color-text);">People leadership:</strong> {role.peopleLeadership}</p>
+  )}
+  <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 1rem;">{role.technologies.join(' · ')}</p>
+</article>

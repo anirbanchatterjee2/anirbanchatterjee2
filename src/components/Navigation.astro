@@ -1,0 +1,36 @@
+---
+import { profile, seoDefaults } from '../data/profile';
+import { navLinks } from '../data/navigation';
+import ThemeToggle from './ThemeToggle.astro';
+
+const current = Astro.url.pathname;
+---
+<header class="no-print" style="position: sticky; top: 0; z-index: 100; background: color-mix(in srgb, var(--color-bg) 90%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border);">
+  <div class="container" style="height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+    <a href="/" aria-label={`${profile.name} — home`} style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.03em; color: var(--color-text); text-decoration: none;">
+      ANIRBAN CHATTERJEE
+    </a>
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <nav aria-label="Primary" style="display: flex; gap: 0.5rem;">
+        {navLinks.map((l) => (
+          <a
+            href={l.href}
+            aria-current={current === l.href ? 'page' : undefined}
+            style={`padding: 0.5rem 0.875rem; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500; text-decoration: none; ${current === l.href ? 'color: var(--color-accent); background: rgba(22, 58, 95, 0.08);' : 'color: var(--color-text-secondary);'}`}
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
+      <ThemeToggle />
+      <a
+        href={profile.resumePdfPath}
+        download
+        class="btn btn-primary"
+        style="padding: 0.6rem 1.25rem; font-size: 0.875rem;"
+      >
+        Download Resume
+      </a>
+    </div>
+  </div>
+</header>

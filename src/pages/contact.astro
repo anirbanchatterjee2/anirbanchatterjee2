@@ -1,45 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
 import { profile } from '../data/profile';
+import { breadcrumbJsonLd } from '../lib/seo';
 ---
-<BaseLayout title="Contact" description={`Contact ${profile.name} — email, LinkedIn and GitHub only. No unnecessary personal information.`} path="/contact">
+<BaseLayout title="Contact — Anirban Chatterjee" description={`Contact ${profile.name} — email, LinkedIn and GitHub only.`} path="/contact" jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])]}>
   <div style="max-width: 560px; margin: 0 auto;">
-    <p class="eyebrow">Contact</p>
-    <h1 style="font-size: 34px; margin-bottom: 8px;">Get in touch</h1>
-    <p style="color: var(--color-text-secondary); margin-bottom: 32px;">Best for VP / Director / Head of Engineering, Enterprise Architecture, and AI Engineering leadership conversations.</p>
-    <div style="display: grid; gap: 16px;">
-      <a href={`mailto:${profile.email}`} style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
-        <strong>Email</strong><br /><span style="color: var(--color-accent);">{profile.email}</span>
+    <SectionHeading title="Contact" subtitle="The fastest way to reach me is email. I also accept professional messages on LinkedIn." />
+    <div style="display: grid; gap: 1rem;">
+      <a href={profile.email.startsWith('mailto:') ? '#' : `mailto:${profile.email}`} style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
+        <strong>Email</strong><br /><span style="color: var(--color-accent);">{profile.email === 'TODO(owner): supply custom-domain contact email' ? 'Email (configure)' : profile.email}</span>
       </a>
-      <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
+      <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
         <strong>LinkedIn</strong><br /><span style="color: var(--color-text-secondary);">{profile.linkedin}</span>
       </a>
-      <a href={profile.github} target="_blank" rel="noopener noreferrer" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
+      <a href={profile.github} target="_blank" rel="noopener noreferrer" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; background: var(--color-surface); text-decoration: none; color: var(--color-text); display: block;">
         <strong>GitHub</strong><br /><span style="color: var(--color-text-secondary);">{profile.github}</span>
       </a>
     </div>
 
-    <h2 style="font-size: 22px; margin: 40px 0 16px;">Or send a message</h2>
-    <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 20px;">Netlify Forms handles delivery — no backend required. Spam protection via honeypot field.</p>
-    <form netlify name="contact" method="POST" style="display: grid; gap: 16px;">
+    <h2 style="font-size: 1.25rem; margin: 3rem 0 1rem 0;">Or send a message</h2>
+    <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Netlify Forms handles delivery — no backend required. Spam protection via honeypot field.</p>
+    <form netlify name="contact" method="POST" style="display: grid; gap: 1rem;">
       <input type="hidden" name="form-name" value="contact" />
-      <!-- Honeypot field — bots fill it, humans don't -->
       <label style="position: absolute; left: -9999px; aria-hidden: true;">If you're a human, leave this blank: <input name="hp" /></label>
       <div>
-        <label style="display: block; font-size: 14px; color: var(--color-text-secondary); margin-bottom: 6px;">Name</label>
-        <input type="text" name="name" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); font-size: 15px;" />
+        <label style="display: block; font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Name</label>
+        <input type="text" name="name" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text);" />
       </div>
       <div>
-        <label style="display: block; font-size: 14px; color: var(--color-text-secondary); margin-bottom: 6px;">Email</label>
-        <input type="email" name="email" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); font-size: 15px;" />
+        <label style="display: block; font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Email</label>
+        <input type="email" name="email" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text);" />
       </div>
       <div>
-        <label style="display: block; font-size: 14px; color: var(--color-text-secondary); margin-bottom: 6px;">Message</label>
-        <textarea name="message" rows="5" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); font-size: 15px;"></textarea>
+        <label style="display: block; font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Message</label>
+        <textarea name="message" rows="5" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text);"></textarea>
       </div>
-      <button type="submit" style="background: var(--color-accent); color: #fff; padding: 11px 20px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer;">Send message</button>
+      <button type="submit" class="btn btn-primary">Send message</button>
     </form>
-    <p id="contact-success" style="display: none; color: var(--color-accent); font-weight: 600; margin-top: 16px;">Thank you — your message has been sent.</p>
+    <p id="contact-success" style="display: none; color: var(--color-accent); font-weight: 600; margin-top: 1rem;">Thank you — your message has been sent.</p>
   </div>
   <script>
     (function () {

@@ -1,21 +1,13 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { breadcrumbJsonLd } from '../lib/seo';
 export const prerender = true;
 ---
-<!doctype html>
-<html lang="en-GB">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Private workspace — coming soon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <main style="max-width: 560px; margin: 80px auto; padding: 0 24px; font-family: system-ui, sans-serif;">
-      <h1>Private workspace — coming soon</h1>
-      <p>This area is reserved for the owner’s authenticated workspace. It is not publicly accessible.</p>
-      <p>Content is managed via the GitHub repository in Phase 1. See <code>docs/PUBLISHING.md</code>. No authentication, AI agents, or sensitive data exist here yet.</p>
-      <p><a href="/">← Back to public site</a></p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="Admin — Coming Soon" description="Private workspace for content management." path="/admin" noindex jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Admin', path: '/admin' }])]}>
+  <div style="max-width: 560px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; margin-bottom: 1rem;">Content Management</h1>
+    <p>Access the Decap CMS admin interface at <a href="/admin/">/admin/</a> (authentication required).</p>
+    <p>Content is managed via GitHub in the <code>src/content/</code> folders.</p>
+    <p><a href="/">← Back to public site</a></p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import AwardCard from '../components/AwardCard.astro';
+import CertificateLightbox from '../components/CertificateLightbox.astro';
+import { awardCategories } from '../data/awards';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { getCollection } from 'astro:content';
+---
+<BaseLayout title="Awards & Recognition — Anirban Chatterjee" description="Professional recognition gallery — corporate awards, engineering excellence, leadership recognition, innovation awards, and technical certifications." path="/awards" jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Awards', path: '/awards' }])]}>
+  <div style="max-width: 1152px; margin: 0 auto;">
+    <SectionHeading title="Awards & Recognition" subtitle="External recognition of engineering excellence, leadership, and innovation." />
+    
+    <!-- Filters -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+      <button onclick="filterAwards('all')" id="filter-all" class="badge badge-category" style="cursor: pointer; border-color: var(--color-accent); color: var(--color-accent);">All</button>
+      {awardCategories.map((cat) => (
+        <button onclick={`filterAwards('${cat}')}`} id={`filter-${cat.replace(/\s/g, '-').toLowerCase()}`} class="badge badge-category" style="cursor: pointer;">{cat}</button>
+      ))}
+    </div>
+
+    <!-- Certificate Lightbox -->
+    <CertificateLightbox />
+
+    <div id="awards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+      {(async () => {
+        const entries = await getCollection('awards', ({ data }) => data.draft !== true);
+        return entries.map((entry) => <AwardCard award={entry.data} />);
+      })()}
+    </div>
+    {(await (async () => {
+      const entries = await getCollection('awards', ({ data }) => data.draft !== true);
+      return entries.length === 0;
+    })()) && (
+      <p id="awards-empty" style="text-align: center; color: var(--color-text-secondary); padding: 3rem;">No awards published yet.</p>
+    )}
+  </div>
+  <script>
+    function filterAwards(category) {
+      const cards = document.querySelectorAll('#awards-grid > article');
+      const buttons = document.querySelectorAll('.badge-category');
+      buttons.forEach(b => {
+        b.style.borderColor = 'var(--color-border)';
+        b.style.color = 'var(--color-text-secondary)';
+      });
+      document.getElementById(`filter-${category.replace(/\s/g, '-').toLowerCase()}`).style.borderColor = 'var(--color-accent)';
+      document.getElementById(`filter-${category.replace(/\s/g, '-').toLowerCase()}`).style.color = 'var(--color-accent)';
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</BaseLayout>

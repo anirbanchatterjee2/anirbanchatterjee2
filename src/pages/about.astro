@@ -1,40 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { profile } from '../data/profile';
+import SectionHeading from '../components/SectionHeading.astro';
+import { profile, seoDefaults } from '../data/profile';
+import { profilePhoto } from '../data/profilePhoto';
+import { breadcrumbJsonLd } from '../lib/seo';
 ---
-<BaseLayout title="About" description={`Professional biography of ${profile.name} — 18+ years from Java engineering in 2008 to VP Engineering in regulated financial services, now focused on AI-native systems.`} path="/about">
-  <article style="max-width: 720px; margin: 0 auto;">
-    <p class="eyebrow">About</p>
-    <h1 style="font-size: 34px; margin: 8px 0 16px;">{profile.firstName} Chatterjee</h1>
-    <p class="hero-serif" style="font-size: 19px; color: var(--color-text-secondary); margin-bottom: 24px;">{profile.shortIntro}</p>
-    {profile.longIntro.map((p) => <p style="margin-bottom: 20px;">{p}</p>)}
-
-    <h2 style="font-size: 22px; margin: 36px 0 14px;">The through-line</h2>
-    <p style="margin-bottom: 16px;">My career is a steady evolution: hands-on Java and full-stack engineering (2008–2015) → U.S.-based integration and cloud architecture at Qualcomm (2016–2018) → high-throughput risk-platform architecture at L&T Infotech (2018–2019) → multi-layer engineering leadership for Citi’s AML and risk technology (2019–present). At each step I have moved one level up the stack — code, systems, platforms, organisations — while staying accountable for whether the technology actually delivered business outcomes.</p>
-    <p style="margin-bottom: 16px;">The regulated context has been a constant. AML/KYC, auditability, and high-security environments demand a different kind of engineering discipline: evidence before commitment, metrics as culture, and platforms that multiply every team’s output. That discipline is what I now bring to AI-native engineering — RAG pipelines and AI-assisted delivery adopted with POC benchmarks and ROI governance, not vendor enthusiasm.</p>
-
-    <h2 style="font-size: 22px; margin: 36px 0 14px;">Current focus</h2>
-    <ul style="list-style: disc; padding-left: 24px; color: var(--color-text-secondary);">
-      {profile.currentInterests.map((i) => <li style="margin-bottom: 6px;"><strong style="color: var(--color-text);">{i.title}</strong> — {i.note}</li>)}
-    </ul>
-    <p style="margin-top: 12px;">Open to: {profile.targetRoles.join(' · ')}.</p>
-
-    <h2 style="font-size: 22px; margin: 36px 0 14px;">Engineering leadership philosophy</h2>
-    <p style="margin-bottom: 16px;">Great engineering organisations are built through disciplined operating models, not just talent. My consistent focus is on building the machine that builds the product.</p>
-    {profile.leadershipPrinciples.map((p) => (
-      <div style="border-left: 3px solid var(--color-accent); padding-left: 16px; margin-bottom: 16px;">
-        <h3 style="font-size: 16px;">{p.title}</h3>
-        <p style="color: var(--color-text-secondary);">{p.note}</p>
+<BaseLayout title="About — Anirban Chatterjee" description="Professional biography of Anirban Chatterjee — 18+ years from Java engineering in 2008 to VP Engineering in regulated financial services." path="/about" jsonLd={[breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }])]}>
+  <div style="max-width: 760px; margin: 0 auto;">
+    <SectionHeading title="About Me" subtitle="My journey from hands-on engineering to engineering leadership." />
+    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;">
+      <div>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.75; margin-bottom: 2rem;">{profile.shortIntro}</p>
+        {profile.longIntro.map((p, i) => (
+          <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.75; margin-bottom: 2rem;" key={i}>{p}</p>
+        ))}
+        <div style="margin-top: 3rem;">
+          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Engineering Philosophy</h3>
+          {profile.leadershipPrinciples.map((p) => (
+            <div style="border-left: 3px solid var(--color-accent); padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <h4 style="font-size: 1rem; margin: 0 0 0.5rem 0; color: var(--color-text);">{p.title}</h4>
+              <p style="color: var(--color-text-secondary); margin: 0; font-size: 0.95rem;">{p.note}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-
-    <h2 style="font-size: 22px; margin: 36px 0 14px;">Connect</h2>
-    <p style="display: flex; gap: 16px; flex-wrap: wrap;">
-      {profile.socials.map((s) => {
-        const isMailto = s.href.startsWith('mailto:');
-        const isPlaceholder = s.href.startsWith('TODO(owner)');
-        return <a href={isMailto || isPlaceholder ? '#' : s.href} target={isMailto && !isPlaceholder ? '_blank' : undefined} rel={isMailto && !isPlaceholder ? 'noopener noreferrer' : undefined} style="color: var(--color-accent); font-weight: 600;">{s.label} ↗</a>;
-      })}
-    </p>
-  </article>
+      <aside style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; background: var(--color-surface); position: sticky; top: 8rem;">
+        <div style="aspect-ratio: 1; border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem;">
+          {profilePhoto.src && !profilePhoto.src.includes('placeholder') ? (
+            <img src={profilePhoto.src} alt={profilePhoto.alt} style="width: 100%; height: 100%; object-fit: cover;" />
+          ) : (
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--color-muted-bg); color: var(--color-text-secondary); font-size: 0.875rem;">Photograph not uploaded</div>
+          )}
+        </div>
+        <h4 style="font-size: 1rem; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Current Focus</h4>
+        <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; color: var(--color-text-secondary); font-size: 0.9rem;">
+          {profile.currentInterests.map((i) => (
+            <li style="margin-bottom: 0.75rem;"><strong style="color: var(--color-text);">{i.title}</strong> — {i.note}</li>
+          ))}
+        </ul>
+        <h4 style="font-size: 1rem; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary);">Open To</h4>
+        <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0 0 1rem 0;">{profile.openTo.roles}</p>
+        <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0;">{profile.openTo.locationMobility}</p>
+      </aside>
+    </div>
+    <div style="margin-top: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem;">
+      <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Beyond Engineering</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7;">Outside of technology, I'm interested in science, history, geography, economics, global affairs, travel, and exploring new ideas. I believe these interests inform how I approach engineering problems — with curiosity, context, and a willingness to look beyond the obvious solution.</p>
+    </div>
+  </div>
 </BaseLayout>
