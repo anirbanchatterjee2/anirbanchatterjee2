@@ -14,6 +14,7 @@ Certificate PDFs and award photos used on `/awards` and the homepage preview.
 | `star-of-the-month-oct.pdf` | `star-of-the-month-oct.md` |
 | `on-the-spot-8th-march.pdf` | `on-the-spot-8th-march.md` (primary) |
 | `on-the-spot-8th-march-2.pdf` | `on-the-spot-8th-march.md` (additional) |
+| `sun-certified-java-programmer-5.pdf` | `scjp-5.md` |
 
 ## Adding a new certificate (no code changes needed)
 

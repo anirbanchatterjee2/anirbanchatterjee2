@@ -7,14 +7,15 @@
 
 ## Unresolved placeholders in source data (rendering in HTML)
 
-| # | File | Field / context | Current placeholder | Needed from owner |
-|---|------|-----------------|---------------------|-------------------|
-| 1 | `src/data/experience.ts` | `education[0].year` | `[TODO: Graduation year]` | Real graduation year (B.Tech/B.E., WBUT Kolkata) |
-| 2 | `src/data/experience.ts` | `certifications[0].year` | `[TODO: Year]` | Sun Certified Java Programmer 5 certification year |
-| 3 | `src/data/achievements.ts` | `achievements[12].year` (SCJP 5) | `[TODO: Year]` | Same as #2 — deduplicate |
-| 4 | `src/data/achievements.ts` | `achievements[13].year` (AIP Anchor Award) | `[TODO: Year]` | AIP Anchor Award year |
+| # | File | Field / context | Current placeholder | Needed from owner | Status |
+|---|------|-----------------|---------------------|-------------------|--------|
+| 1 | `src/data/experience.ts` | `education[0].year` | `[TODO: Graduation year]` | Real graduation year (B.Tech/B.E., WBUT Kolkata) | Open |
+| 2 | `src/data/experience.ts` | `certifications[0].year` | ~~`[TODO: Year]`~~ | ~~Sun Certified Java Programmer 5 certification year~~ | **Resolved — 2010** (from `Sun Certification.pdf`, issued 25-Feb-2010, ID 234617304SCPJSE5P) |
+| 3 | `src/data/achievements.ts` | `achievements[12].year` (SCJP 5) | ~~`[TODO: Year]`~~ | ~~Same as #2 — deduplicate~~ | **Resolved — 2010** (same certificate) |
+| 4 | `src/data/achievements.ts` | `achievements[13].year` (AIP Anchor Award) | ~~`[TODO: Year]`~~ | ~~AIP Anchor Award year~~ | **Resolved — 2014** (from `AIP Anchor.pdf`, awarded 15-Jul-2014) |
 
-> Note: Items #2 and #3 refer to the same certification. They should share one value.
+> Note: Items #2 and #3 refer to the same certification. They now share the value 2010.
+> The certificate PDFs backing these values are stored in `public/images/awards/`.
 
 ---
 
