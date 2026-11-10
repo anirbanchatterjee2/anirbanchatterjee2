@@ -1,53 +1,114 @@
-# Anirban Chatterjee — Professional Identity & AI Career Platform
+# Hi, I'm Anirban Chatterjee 👋
 
-A clean, static, production-ready professional website: online resume, career achievements, technical skills, projects, and a technical publication platform — with the architectural seams for a future private, AI-powered career workspace.
+### Engineering Leader | Software Architect | AI & Distributed Systems Enthusiast
 
-> **Build an excellent professional website first. Build the AI career OS around it later.**
+I'm an engineering professional with **18+ years of experience** building enterprise software, architecting distributed systems, modernising technology platforms and leading engineering teams.
 
-## Quick start
+Over the years, I've worked across enterprise technology, financial services and global technology organisations, combining hands-on engineering foundations with architecture, technical strategy and engineering leadership.
 
-**Prerequisite:** Node.js 20+ (https://nodejs.org).
+I'm particularly interested in the intersection of **Artificial Intelligence, software engineering, distributed systems and intelligent automation**.
 
-```bash
-npm install
-npm run dev      # http://localhost:4321
-npm run build    # static site → dist/ (deploy this)
-npm run preview  # preview the production build
-npm test         # unit tests (Vitest)
-npm run test:e2e # smoke tests (Playwright, starts dev server)
-```
+I enjoy understanding how things work, challenging conventional approaches and turning interesting ideas into practical engineering solutions.
 
-## What's here
+---
 
-| Section | URL | Source of truth |
-|---|---|---|
-| Home | `/` | `src/data/profile.ts` |
-| About | `/about` | `profile.ts` |
-| Experience | `/experience` | `src/data/experience.ts` |
-| Achievements | `/achievements` | `src/data/achievements.ts` |
-| Skills | `/skills` | `src/data/skills.ts` |
-| Projects | `/projects` + `/projects/[slug]` | `src/content/projects/*.mdx` |
-| Blog | `/blog` + `/blog/[slug]` + `/blog/tags/[tag]` | `src/content/blog/*.md` |
-| Resume (print + PDF) | `/resume` | same data files (no duplicate) |
-| Contact | `/contact` | `profile.ts` |
-| Placeholder admin | `/admin` (noindex) | `src/pages/admin.astro` |
+## 🚀 What I'm Exploring
 
-## Publish content (no CMS)
+My current focus is on exploring and building with emerging technologies:
 
-See **[docs/PUBLISHING.md](docs/PUBLISHING.md)** — add a Markdown file under `src/content/blog/`, set `draft: false`, push. Netlify deploys automatically. Every article gets a permanent URL, Open Graph / LinkedIn preview, canonical URL, reading time, tags, categories, search, and related articles.
+- 🤖 **Agentic AI & LLM Engineering** — LangChain, LangGraph, RAG, AI agents and multi-agent systems.
+- 🧠 **AI-Native Software Engineering** — Rethinking how software is designed, developed and optimised in an AI-first world.
+- 🐍 **Python & Backend Engineering** — Building scalable applications, APIs and intelligent systems.
+- ☁️ **Cloud & Distributed Systems** — AWS, microservices, event-driven architectures and scalable infrastructure.
+- 🔍 **Multimodal AI & Computer Vision** — Extracting intelligence from complex engineering diagrams and unstructured information.
+- ⚙️ **Engineering Productivity** — Developer experience, automation, architecture optimisation and efficient software delivery.
 
-## Design
+---
 
-Minimal, editorial, content-first. Light theme by default, optional dark mode (persisted), fully responsive, accessible (semantic HTML, skip link, focus states, reduced-motion), SEO-ready (sitemap, robots, JSON-LD Person + BlogPosting, per-article OG/Twitter cards). No gradients, no skill bars, no invented facts — placeholders are marked `[TODO…]` until you replace them.
+## 💡 Things I'm Building
 
-## Deployment
+I believe the best way to understand technology is to build with it.
 
-Netlify, zero cost, HTTPS automatic. See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. GitHub Pages alternative included.
+Some of my current experiments and projects include:
 
-## Future private workspace
+### 1. Agent Minimiser — Cold Coffee Brewing Engine
+Exploring the concept of minimising token consumption and unnecessary reasoning in AI agents through structured workflows, deterministic execution and intelligent context management.
 
-Only interfaces exist — see **[docs/FUTURE-INTEGRATION.md](docs/FUTURE-INTEGRATION.md)** and `src/lib/services/`. No AI agents are implemented in this phase; the public site never depends on them.
+### 2. Engineering Diagram Intelligence
+An AI-powered exploration into understanding complex engineering diagrams, extracting technical information and converting unstructured visual information into structured, searchable knowledge.
 
-## Security
+### 3. RAG & Knowledge Intelligence
+Experimenting with retrieval-augmented generation, document intelligence, embeddings and contextual knowledge retrieval to build systems that can reason over specialised information.
 
-No public posting or registration. GitHub write access controls publishing. No secrets in the repo (see `.env.example`). `/admin` is explicitly not authentication.
+More projects and experiments will find their way here as they evolve.
+
+---
+
+## 🏗️ My Engineering Interests
+
+Beyond specific technologies, I'm fascinated by:
+
+- Distributed systems and large-scale architectures.
+- System design and low-level design.
+- Performance engineering and optimisation.
+- Event-driven and asynchronous architectures.
+- AI agents and autonomous workflows.
+- Open-source software and engineering craftsmanship.
+- Building technology that solves meaningful real-world problems.
+
+---
+
+## 🛠️ Technology Landscape
+
+**Languages & Backend**
+
+Java | Python | Spring Boot | FastAPI | REST APIs
+
+**AI & Intelligent Systems**
+
+LLMs | LangChain | LangGraph | RAG | Vector Databases | Embeddings | Agentic Workflows
+
+**Cloud & Infrastructure**
+
+AWS | Docker | Kubernetes | Terraform | CI/CD
+
+**Architecture & Integration**
+
+Microservices | Distributed Systems | Kafka | Event-Driven Architecture | API Design
+
+**Frontend**
+
+Angular | React | TypeScript | JavaScript
+
+This landscape reflects a combination of professional experience and technologies I'm actively exploring. Not every technology represents the same depth of hands-on experience.
+
+---
+
+## 🌱 Beyond Engineering
+
+I'm naturally curious and enjoy exploring ideas beyond technology.
+
+Some of my interests include:
+
+- 🌍 Geography, history and geopolitics.
+- 🔬 Science, emerging technologies and the future of humanity.
+- 📈 Economics, investing and understanding global markets.
+- 🏛️ Architecture, infrastructure and engineering marvels.
+- 🌊 Travel, scuba diving, paragliding and exploring new places.
+- 📚 Reading about ideas, people and innovations that challenge conventional thinking.
+
+I enjoy connecting seemingly unrelated ideas and understanding how they influence the world around us.
+
+---
+
+## 🤝 Let's Connect
+
+I'm always interested in connecting with people who enjoy discussing technology, architecture, AI, engineering leadership and interesting ideas.
+
+- 🌐 **Website:** [anirban-chatterjee.netlify.app](https://anirban-chatterjee.netlify.app/)
+- 💼 **LinkedIn:** [Connect with me](https://www.linkedin.com/)
+- 🐙 **GitHub:** You're already here!
+
+---
+
+*"Stay curious. Keep building. Never stop questioning how things can be done better."*
